@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Green Circle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    html,body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      height:100%;
+    }
+
+    .container {
+      display: flex;
+  height: 100vh; /* Full viewport height */
+    }
+
+    .sidebar {
+      width: 280px;
+      background-color: #FAFAFA;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid #eee;
+      height:100%;
+    }
+
+    .top {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .workspace {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .workspace img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .workspace-info {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      flex: 1;
+    }
+
+    .workspace-info span:first-child {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .workspace-info span:last-child {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    nav {
+      padding-left: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #4b5563;
+      position: relative;
+      text-decoration: none;
+      padding: 8px 0;
+      margin-bottom: 15px;
+    }
+
+    .nav-item.active {
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      height: 100%;
+      width: 4px;
+      background-color:#2e7d32;
+      border-radius: 1px;
+    }
+
+    .nav-item.logout {
+      color: #ef4444;
+      font-weight: 500;
+    }
+
+    .notification-badge {
+      background-color: #ef4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 999px;
+      position: absolute;
+      right: 0;
+      
+    }
+
+    .logout-button {
+  margin-top: auto; /* Push to bottom if using flex layout */
+  background-color: #efefef;
+  color: #6B7280;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #ffcccc;
+}
+
+.logout-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+  .menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* space between icon and text */
+}
+
+
+.menu-item svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.menu-item span {
+  font-size: 16px;
+  font-weight: 500;
+   }
+
+    .main-content {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 20px;
+      height: 90%;
+      overflow-y: auto; /* Optional: scroll if content overflows */
+    }
+
+
+.tab-container {
+    display: flex;
+  width: max-content;     /* Fit width to content */
+  height: auto;           /* Let height be based on children */
+  width: 100%;
+  align-items: stretch;   /* Stretch tabs to same height */
+  border-bottom:1px solid rgba(229, 231, 235, 0.5);
+}
+
+.tab {
+  padding: 10px 30px;
+  border-radius: 12px 12px 0 0;
+  cursor: pointer;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.tab.active {
+  background-color: #f2f2ff; /* light lavender */
+  color:#2e7d32;          /* vibrant blue */
+  font-weight: bold;
+}
+
+a {
+  all: unset; /* resets all inherited and applied styles */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.tree-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.tree-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tree-card h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: #8bc34a; /* changed */
+}
+
+.tree-card p {
+  margin: 8px 0;
+  color: #444;
+}
+
+.label {
+  font-weight: bold;
+  color: #555;
+}
+
+header {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+  margin-left: -600px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  background: #f0f9e6; /* softened background instead of #e4f3cf */
+  padding-bottom: 0.5rem;
+}
+
+.tab {
+  margin: 12px 1rem 0;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.tab.active {
+  background: #dbe7b4;  /* changed */
+  color: #556;
+}
+
+.tab:hover
+{
+  color: #000000;
+}
+
+.search-sort {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+}
+
+.search-sort .count {
+  font-size: 1rem;
+  color: black;
+  font-weight: bold;
+}
+
+.search-sort .count span:last-child {
+  color: #888;
+  font-weight: normal;
+}
+
+.search-sort select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  background: #f6f9f5;
+  border-radius: 7px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.card h3 {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  background: #f6f9f5;
+}
+
+.filters {
+  padding-left: 2rem;
+}
+
+.filters button {
+  background:#dbe7b4;  /* changed */
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  color: #556;
+}
+
+
+@media (max-width: 600px) {
+  .search-sort {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .search-sort input {
+    width: 100%;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="sidebar">
+    <div class="top">
+      <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+        <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+          Green Circle 
+        </span>
+      </div>
+
+  <div class="workspace" style="border: 1px solid rgba(229, 231, 235, 0.5);">
+  <img src="https://ui-avatars.com/api/?name=GC&background=00a884&color=fff" alt="Sample Image" />
+  <div class="workspace-info">
+    <span id="userEmail" style="font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 5px; font-size:14px;"></span>
+    <span style="font-family: 'Inter', sans-serif; font-size: 12px;" >10 entries</span>
+  </div>
+  <i data-feather="chevron-down" style="color: #9ca3af;" width="16" height="16"></i>
+</div>
+
+<nav>
+        <a href="/home" class="nav-item active">
+        <div class="menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+            <title>home</title>
+            <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+            <polyline data-cap="butt" data-color="color-2" points="1 11 12 2 23 11" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <polyline data-cap="butt" points="10 23 10 17 14 17 14 23" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <path d="M4,13v8c0,1.105,.895,2,2,2h12c1.105,0,2-.895,2-2V13" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+          </g>
+        </svg>
+        <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Home</span>
+    </div>
+    </a>
+        <a id="libraryLink1" href="#" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>app store</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <rect x="2" y="2" width="8" height="8" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect data-color="color-2" x="14.464" y="2.464" width="7.071" height="7.071" transform="translate(1.03 14.485) rotate(-45)" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="14" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="2" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: Arial, sans-serif;font-size: 14px;">My Library</span>
+  </div>
+</a>
+
+        <a href="/generate" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line-icon lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Generate Qr code</span>
+  </div>
+</a>
+
+        <a href="#" class="nav-item">
+        <div class="menu-item">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+          <title>alarm</title><g stroke-linejoin="miter" fill="currentcolor" stroke-linecap="butt" class="nc-icon-wrapper">
+            <path d="M19,13V8A7,7,0,0,0,5,8v5a13.834,13.834,0,0,1-2,7H21A13.834,13.834,0,0,1,19,13Z" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/> 
+            <path data-color="color-2" data-stroke="none" d="M9.174,22a3,3,0,0,0,5.652,0Z" fill="currnetcolor" stroke="none"/></g>
+          </svg>
+              <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Notification</span>
+              <span class="notification-badge">9</span>
+          </div>
+          </a>
+
+        <a href="#" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>cogwheel</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <path d="M23,13.5v-3l-3.248-.443a7.927,7.927,0,0,0-.9-2.165l1.984-2.61L18.718,3.161l-2.61,1.984a7.927,7.927,0,0,0-2.165-.9L13.5,1h-3l-.443,3.248a7.927,7.927,0,0,0-2.165.9L5.282,3.161,3.161,5.282l1.984,2.61a7.927,7.927,0,0,0-.9,2.165L1,10.5v3l3.248.443a7.927,7.927,0,0,0,.9,2.165l-1.984,2.61,2.121,2.121,2.61-1.984a7.927,7.927,0,0,0,2.165.9L10.5,23h3l.443-3.248a7.927,7.927,0,0,0,2.165-.9l2.61,1.984,2.121-2.121-1.984-2.61a7.927,7.927,0,0,0,.9-2.165Z" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <circle data-color="color-2" cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Settings</span>
+  </div>
+  </a>
+      </nav>
+    </div>
+
+    <a href="#" class="logout-button">
+  <div class="logout-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>logout</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+        <path d="M16,17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M21,12H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M12,2H5C3.895,2,3,2.895,3,4v16c0,1.105,0.895,2,2,2h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+      </g>
+    </svg>
+    <span>Logout</span>
+  </div>
+</a>
+
+<a href="#" style="text-decoration: none; margin-top :20px; font-size: 12px; margin-left:60px; color:#2e7d32;">? Help & Feedback</a>
+  </div>
+
+  <div class="main-content">
+<div style="margin:0; font-family: 'Segoe UI', sans-serif; background-color:#f9fbf2; color:#333;">
+
+  <div style="padding: 2rem;">
+    
+    <!-- Explore and Dropdown -->
+    <div style="display: flex; align-items: center; gap: 10px; font-size: 14px; margin-bottom: 10px;">
+      <span style="font-weight: 500;">EXPLORE</span>
+      <button style="background-color: #dbe7b4; border: none; padding: 6px 12px; font-weight: bold; font-size: 14px; border-radius: 6px; cursor: pointer;">
+        FLORA ▼
+      </button>
+    </div>
+
+    <!-- Heading -->
+<h1 style="display: flex; align-items: baseline; font-size: 2.5rem; margin: 0 930px 20px 0; color: #222; gap: 12px;">
+  <strong style="font-weight: bold;">Families</strong>
+<span style="font-weight: normal; color: #556; font-size: 1.5rem; white-space: nowrap;">of the {{.Category}}</span>
+</h1>
+
+
+    <!-- Search Bar -->
+    <div style="display: flex; max-width: 1300px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background-color: white;">
+      <input id="searchInput"
+        type="text"
+        placeholder="Search genera or families"
+        style="flex: 1; border: none; padding: 1rem; font-size: 1rem; outline: none;"/>
+      <button  
+        style="background-color: #dbe7b4; border: none; padding: 1rem 1.5rem; cursor: pointer; font-weight: 600; color: #333; font-size: 1rem; border-left: 1px solid #ccc;">
+        Search
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+
+  <div class="tabs">
+    <div class="tab active" id="familyTab">Families</div>
+    <div class="tab" id="generaTab">Genera</div>
+    <div class="tab" id="speciesTab">Species</div>
+  </div>
+
+<div class="search-sort">
+    <div class="count">
+      <span id="countNumber" style="color: black; font-weight: bold;"></span>
+      <span style="color: #888; font-weight: normal;">families</span>
+    </div>
+<select id="sortSelect" style="padding: 0.5rem; border-radius: 6px;  background-color :#ffffff;  color: rgb(0, 0, 0); font-weight: bold; cursor: pointer;">
+  <option value="az" style="color: black;">Sort A → Z</option>
+  <option value="za" style="color: black;">Sort Z → A</option>
+</select>
+
+</div>
+
+
+  <div class="filters" style="margin-top:-45px; margin-bottom: 30px;">
+    <button><svg style="margin-right:4px;" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-funnel-icon lucide-funnel"><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"/></svg>Filters</button>
+<div style="position: relative; display: inline-block;">
+  <button id="geoToggleBtn" style="padding: 0.5rem 1rem; border-radius: 6px; background:#dbe7b4; color: #333; border: none; cursor: pointer;">
+    <svg style="margin-right:4px; vertical-align: middle;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"/>
+      <path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"/>
+      <path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"/>
+      <circle cx="12" cy="12" r="10"/>
+    </svg>
+    Filter by Geolocation ▾
+  </button>
+
+  <div id="geoDropdown" style="display: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 6px; margin-top: 4px; min-width: 180px; z-index: 100;">
+    <div onclick="filterByGeo('BMIST')" style="padding: 10px; cursor: pointer;">BMIST</div>
+    <div onclick="filterByGeo('Green Circle')" style="padding: 10px; cursor: pointer;">Green Circle</div>
+    <div onclick="filterByGeo('all')" style="padding: 10px; cursor: pointer; color: #888;">Reset Filter</div>
+  </div>
+</div>
+
+
+</div>
+
+{{if .Trees}}
+  <div class="grid" id="familyGrid">
+    {{range .Trees}}
+      <div class="card" data-site="{{.Location.Site}}">
+        {{if .Images}}
+          <img src="{{(index .Images 0).URL}}" alt="Tree Image" />
+        {{else}}
+          <p>No image available.</p>
+        {{end}}
+        <h3 style="font-size: 1.2rem; font-style: italic;">
+{{.Classification.Family}}
+</h3>
+        
+      </div>
+    {{end}}
+  </div>
+{{else}}
+  <p style="text-align: center;">No trees found in this category.</p>
+{{end}}
+
+
+
+    </div>
+  </div>
+
+  <script>
+    feather.replace();
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function (e) {
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  </script>
+
+
+
+<script>
+      window.addEventListener("DOMContentLoaded", () => {
+  const email = localStorage.getItem("loggedInEmail");
+  const userSpan = document.getElementById("userEmail");
+
+  if (email && userSpan) {
+    userSpan.textContent = email;
+  } else {
+    userSpan.textContent = "Not logged in";
+  }
+
+    document.getElementById("libraryLink1").addEventListener("click", function () {
+    if (email) {
+      window.location.href = `/library?email=${encodeURIComponent(email)}`;
+    }
+  });
+});
+</script>
+
+<script>
+  const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
+    const grid = document.getElementById("familyGrid");
+
+    searchInput.addEventListener("input", () => {
+      const filter = searchInput.value.toLowerCase();
+      const cards = grid.querySelectorAll(".card");
+      cards.forEach(card => {
+        const name = card.querySelector("h3").textContent.toLowerCase();
+        card.style.display = name.includes(filter) ? "block" : "none";
+      });
+    });
+
+    sortSelect.addEventListener("change", () => {
+      const cards = Array.from(grid.querySelectorAll(".card"));
+      const sorted = cards.sort((a, b) => {
+        const nameA = a.querySelector("h3").textContent;
+        const nameB = b.querySelector("h3").textContent;
+        return sortSelect.value === "az"
+          ? nameA.localeCompare(nameB)
+          : nameB.localeCompare(nameA);
+      });
+
+      grid.innerHTML = "";
+      sorted.forEach(card => grid.appendChild(card));
+    });
+</script>
+
+<script>
+      window.addEventListener("DOMContentLoaded", () => {
+  const email = localStorage.getItem("loggedInEmail");
+  const userSpan = document.getElementById("userEmail");
+
+  if (email && userSpan) {
+    userSpan.textContent = email;
+  } else {
+    userSpan.textContent = "Not logged in";
+  }
+
+    document.getElementById("libraryLink1").addEventListener("click", function () {
+    if (email) {
+      window.location.href = `/library?email=${encodeURIComponent(email)}`;
+    }
+  });
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const generaTab = document.getElementById("generaTab");
+
+    if (generaTab) {
+      generaTab.addEventListener("click", () => {
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get("category");
+
+        if (category) {
+          const encodedCategory = encodeURIComponent(category);
+          window.location.href = `/genera?category=${encodedCategory}`;
+        } else {
+          alert("No category found in URL.");
+        }
+      });
+    }
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const speciesTab = document.getElementById("speciesTab");
+    if (speciesTab) {
+      speciesTab.addEventListener("click", () => {
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get("category");
+        if (category) {
+          window.location.href = `/species?category=${encodeURIComponent(category)}`;
+        }
+      });
+    }
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const familyTab = document.getElementById("familyTab");
+    if (familyTab) {
+      familyTab.addEventListener("click", () => {
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get("category");
+        if (category) {
+          window.location.href = `/list?category=${encodeURIComponent(category)}`;
+        }
+      });
+    }
+  });
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const cards = document.querySelectorAll("#familyGrid .card");
+    document.getElementById("countNumber").textContent = cards.length;
+  });
+</script>
+
+<script>
+  const geoBtn = document.getElementById("geoToggleBtn");
+  const dropdown = document.getElementById("geoDropdown");
+
+  geoBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+  });
+
+  function filterByGeo(site) {
+    const cards = document.querySelectorAll(".card"); // or .tree-card if you're using that
+    cards.forEach(card => {
+      const cardSite = (card.dataset.site || "").toLowerCase();
+      if (site === "all" || cardSite.includes(site.toLowerCase())) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+    dropdown.style.display = "none";
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", () => {
+    dropdown.style.display = "none";
+  });
+</script>
+
+
+
+
+
+
+</body>
+</html>

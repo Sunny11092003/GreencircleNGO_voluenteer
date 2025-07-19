@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Green Circle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    html,body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      height:100%;
+    }
+
+    .container {
+      display: flex;
+  height: 100vh; /* Full viewport height */
+    }
+
+    .sidebar {
+      width: 280px;
+      background-color: #FAFAFA;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid #eee;
+      height:100%;
+    }
+
+    .top {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .workspace {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .workspace img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .workspace-info {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      flex: 1;
+    }
+
+    .workspace-info span:first-child {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .workspace-info span:last-child {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    nav {
+      padding-left: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #4b5563;
+      position: relative;
+      text-decoration: none;
+      padding: 8px 0;
+      margin-bottom: 15px;
+    }
+
+    .nav-item.active {
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      height: 100%;
+      width: 4px;
+      background-color:#2e7d32;
+      border-radius: 1px;
+    }
+
+    .nav-item.logout {
+      color: #ef4444;
+      font-weight: 500;
+    }
+
+    .notification-badge {
+      background-color: #ef4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 999px;
+      position: absolute;
+      right: 0;
+      
+    }
+
+    .logout-button {
+  margin-top: auto; /* Push to bottom if using flex layout */
+  background-color: #efefef;
+  color: #6B7280;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #ffcccc;
+}
+
+.logout-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+  .menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* space between icon and text */
+}
+
+
+.menu-item svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.menu-item span {
+  font-size: 16px;
+  font-weight: 500;
+   }
+
+    .main-content {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 20px;
+      height: 90%;
+      overflow-y: auto; /* Optional: scroll if content overflows */
+    }
+
+
+
+    .container1 {
+      max-width: 1000px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.09);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+
+.desc {
+  font-size: 15px;
+  color: #2e3c2f;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+
+    .desc strong {
+      color: #2e7d32;
+    }
+
+    .upload-box {
+      border: 2px dashed #ccc;
+      border-radius: 6px;
+      background: #fbfbfb;
+      padding: 24px;
+      text-align: center;
+      color: #666;
+      margin-bottom: 24px;
+      font-size: 16px;
+    }
+
+    .image-grid {
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+    }
+
+    .image-slot {
+      width: 160px;
+      height: 180px;
+      border: 2px dashed #ccc;
+      border-radius: 6px;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: 14px;
+      position: relative;
+    }
+
+    .image-slot img {
+  image-rendering: auto;
+}
+
+
+    .image-slot img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover; /* This is the key */
+      border-radius: 6px;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: #f44336;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 14px;
+      line-height: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .new-query {
+      float: right;
+      font-size: 14px;
+      color: #c0392b;
+      cursor: pointer;
+    }
+
+    .recommendation {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .icon-hint {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+    }
+
+    .remove-btn {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  background: red;
+  color: white;
+  border: none;
+  font-size: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.form-container {
+  max-width: 1000px;
+  margin:auto;
+  margin-top:50px;
+  background: white;
+  padding: 34px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  margin-bottom: -300px !important;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.form-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: 10px;
+  color: #111827;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin: 12px 0 6px;
+  color: #374151;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #f4f5f7;
+  font-size: 15px;
+  color: #111827;
+  margin-bottom:10px;
+  max-width:370px;
+}
+
+select
+{
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #f4f5f7;
+  font-size: 15px;
+  color: #111827;
+  margin-bottom:10px;
+  max-width:395px;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.form-header-icon svg {
+  flex-shrink: 0;
+}
+
+.form-header-content h3 {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.form-header-content p {
+  margin: 4px 0 0;
+  color: #4B5563; /* Gray-600 */
+  font-size: 14px;
+}
+
+   #map {
+      height: 300px;
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 20px;
+      max-width: 450px;
+      position:relative;
+      top:-100px;
+      left:610px;
+    }
+
+  .manual {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: 'Archivo', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .manual:hover {
+    background-color: #ccc;
+    color: #000;
+  }
+
+  .save-button {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-family: 'Archivo', sans-serif;
+  }
+
+  .save-button:hover {
+    background-color: #256828;
+    transform: scale(1.02);
+  }
+
+
+      .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+      margin-top:-100px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 34px;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #66bb6a;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .share-button {
+      background-color: #8bc34a;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top:-92px;
+    }
+
+    .share-button:hover {
+      background-color: #7cb342;
+    }
+
+#qrModal.qr-modal {
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+#qrModal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.qr-modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+}
+
+.qr-close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+#qrLoading p {
+  font-size: 16px;
+  color: #555;
+  animation: blink 1.2s linear infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hamburger {
+  display: none; /* Default: hidden on larger screens */
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 16px;
+  position: absolute;
+  top: 0px;
+  left: 340px;
+  z-index: 1001;
+}
+
+.mobile-header {
+  display: none;
+}
+
+/* Visible and animated only on mobile */
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FAFAFA;
+    padding: 12px 16px;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
+    transition: top 0.3s ease-in-out;
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+  
+  .mobile-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .hamburger {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background-color: #FAFAFA;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 999;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+
+  .action-bar {
+    display: none !important;
+  }
+
+  .scan{
+    position:absolute;
+    left:300px;
+    color:#9ca3af;
+  }
+
+.mobile-flex-container {
+    flex-direction: column;
+  }
+
+
+}
+
+@media only screen and (max-width: 768px) {
+  .container1,
+  .form-container {
+    padding: 16px;
+    margin: 20px auto;
+    border-radius: 6px;
+    box-shadow: none;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .desc {
+    font-size: 14px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+
+  .upload-box {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  .image-grid {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .image-slot {
+    width: 100%;
+    height: 200px;
+  }
+
+  .remove-btn {
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+  }
+
+  input,
+  textarea,
+  select {
+    max-width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .form-header {
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .form-header h3 {
+    font-size: 16px;
+  }
+
+  #map {
+    position: static;
+    top: unset;
+    left: unset;
+    max-width: 100%;
+    width: 100%;
+    height: 250px;
+    margin-top: 20px;
+    border-radius: 8px;
+  }
+
+  .toggle-container {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 0;
+    gap: 8px;
+  }
+
+  .share-button {
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .save-button,
+  .manual {
+    width: 100%;
+    justify-content: center;
+    font-size: 15px;
+  }
+
+  .qr-modal-content {
+    width: 90%;
+    padding: 16px;
+  }
+
+  .result-card {
+    padding: 20px;
+  }
+
+  .result-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .result-content {
+    font-size: 14px;
+    padding: 16px;
+  }
+
+  .back-link {
+    font-size: 14px;
+    margin-top: 16px;
+  }
+
+  .result-card h2:first-child {
+    font-size: 12px;
+    padding: 4px 10px;
+    margin-bottom: 10px;
+  }
+
+  .button-species {
+    margin: 16px 0 0;
+    width: 100%;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .select-btn {
+    width: 100%;
+    font-size: 15px;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+<header class="mobile-header">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="logo">
+    <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+    <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+      Green Circle 
+    </span>
+  </div>
+  <p id="startScanBtn" class="scan">Scan</p>
+</header>  
+
+<div class="container">
+  <div class="sidebar">
+    <div class="top">
+      <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+        <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+          Green Circle 
+        </span>
+      </div>
+
+  <div class="workspace" style="border: 1px solid rgba(229, 231, 235, 0.5);">
+  <img src="https://ui-avatars.com/api/?name=GC&background=00a884&color=fff" alt="Sample Image" />
+  <div class="workspace-info">
+    <span id="userEmail" style="font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 5px; font-size:14px;"></span>
+    <span style="font-family: 'Inter', sans-serif; font-size: 12px;" >10 entries</span>
+  </div>
+  <i data-feather="chevron-down" style="color: #9ca3af;" width="16" height="16"></i>
+</div>
+
+<nav>
+        <a href="/home" class="nav-item active">
+        <div class="menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+            <title>home</title>
+            <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+            <polyline data-cap="butt" data-color="color-2" points="1 11 12 2 23 11" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <polyline data-cap="butt" points="10 23 10 17 14 17 14 23" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <path d="M4,13v8c0,1.105,.895,2,2,2h12c1.105,0,2-.895,2-2V13" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+          </g>
+        </svg>
+        <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Home</span>
+    </div>
+    </a>
+        <a href="/library" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>app store</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <rect x="2" y="2" width="8" height="8" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect data-color="color-2" x="14.464" y="2.464" width="7.071" height="7.071" transform="translate(1.03 14.485) rotate(-45)" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="14" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="2" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: Arial, sans-serif;font-size: 14px;">My Library</span>
+  </div>
+</a>
+
+        <a href="/generate" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line-icon lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Generate Qr code</span>
+  </div>
+</a>
+
+        <a href="#" class="nav-item">
+        <div class="menu-item">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+          <title>alarm</title><g stroke-linejoin="miter" fill="currentcolor" stroke-linecap="butt" class="nc-icon-wrapper">
+            <path d="M19,13V8A7,7,0,0,0,5,8v5a13.834,13.834,0,0,1-2,7H21A13.834,13.834,0,0,1,19,13Z" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/> 
+            <path data-color="color-2" data-stroke="none" d="M9.174,22a3,3,0,0,0,5.652,0Z" fill="currnetcolor" stroke="none"/></g>
+          </svg>
+              <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Notification</span>
+              <span class="notification-badge">9</span>
+          </div>
+          </a>
+
+        <a href="#" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>cogwheel</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <path d="M23,13.5v-3l-3.248-.443a7.927,7.927,0,0,0-.9-2.165l1.984-2.61L18.718,3.161l-2.61,1.984a7.927,7.927,0,0,0-2.165-.9L13.5,1h-3l-.443,3.248a7.927,7.927,0,0,0-2.165.9L5.282,3.161,3.161,5.282l1.984,2.61a7.927,7.927,0,0,0-.9,2.165L1,10.5v3l3.248.443a7.927,7.927,0,0,0,.9,2.165l-1.984,2.61,2.121,2.121,2.61-1.984a7.927,7.927,0,0,0,2.165.9L10.5,23h3l.443-3.248a7.927,7.927,0,0,0,2.165-.9l2.61,1.984,2.121-2.121-1.984-2.61a7.927,7.927,0,0,0,.9-2.165Z" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <circle data-color="color-2" cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Settings</span>
+  </div>
+  </a>
+      </nav>
+    </div>
+
+    <a href="#" class="logout-button">
+  <div class="logout-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>logout</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+        <path d="M16,17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M21,12H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M12,2H5C3.895,2,3,2.895,3,4v16c0,1.105,0.895,2,2,2h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+      </g>
+    </svg>
+    <span>Logout</span>
+  </div>
+</a>
+
+<a href="#" style="text-decoration: none; margin-top :20px; font-size: 12px; margin-left:60px; color:#2e7d32;">? Help & Feedback</a>
+  </div>
+
+  <div class="main-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;">
+  <!-- Title -->
+  <h1 style="font-family: 'Archivo', sans-serif; font-size: 32px;">Results</h1>
+
+  <!-- Action Bar (Right Side) -->
+  <div class="action-bar" style="display: flex; align-items: center; gap: 16px;">
+
+    <!-- Eidt Button -->
+     <button id="edit-manual-btn" class="manual">Edit Manually</button>
+
+<button class="save-button" id="save-btn">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+       viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+       class="lucide lucide-save-icon lucide-save">
+    <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+    <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/>
+    <path d="M7 3v4a1 1 0 0 0 1 1h7"/>
+  </svg>
+</button>
+
+    
+  </div>
+</div>
+
+  <div class="container1">
+    <div class="new-query">New query &#x26A0;</div>
+    <h2>Query</h2>
+    <div class="desc">
+      <strong>Identify / Contribute to GreenCircle</strong><br>
+      The observation can only have up to 4 pictures of the same plant or tree<br>
+      At least one photo of leaf, flower, fruit or bark is required.<br>
+      It is recommended to use images with these dimensions: <strong>1280px</strong>
+    </div>
+
+<div class="upload-box" onclick="document.getElementById('imageInput').click();">
+  add / drop images
+</div>
+
+<input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+
+<div class="image-grid">
+  {{range .ImageURLs}}
+    <div class="image-slot">
+      <img src="{{.}}" alt="Plant Image" style="width: 100%; height: auto;">
+    </div>
+  {{end}}
+
+      <!-- Empty slots -->
+      <div class="image-slot">+</div>
+      <div class="image-slot">+</div>
+      <div class="image-slot">+</div>
+    </div>
+  </div>
+
+ <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 32px; max-width: 1140px; margin: auto;">
+  <style>
+    .result-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e0f2f1;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .result-card:hover {
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-title {
+      color: #2e7d32;;
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .result-content {
+      background-color: #f9f9f9;
+      border-left: 4px solid #2e7d32;;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      line-height: 1.7;
+      color: #333;
+      white-space: pre-wrap;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 30px;
+      text-decoration: none;
+      color: #2e7d32;;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s ease;
+    }
+
+    .result-card h2:first-child {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #0288d1;
+  background-color: #e1f5fe;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-weight: bold;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+
+    .back-link:hover {
+      margin-top:-50px;
+      color: #004d40;
+      text-decoration: underline;
+    }
+  </style>
+
+  <div class="result-card">
+    <h2><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkle-icon lucide-sparkle">
+      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>AI generated</h2>
+    <h2 class="result-title">Scientific Name: {{.ScientificName}}</h2>
+    <div class="result-content">{{.ResponseText}}</div>
+  </div>
+
+  <div class="form-container">
+  <div class="form-header">
+  <div class="form-header-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+         viewBox="0 0 24 24" fill="none" stroke="#2e7d32" 
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+      <circle cx="12" cy="10" r="3"/>
+    </svg>
+  </div>
+  <div class="form-header-content">
+    <h3>Location</h3>
+    <p>You can choose the location or pinpoint on the map</p>
+  </div>
+</div>
+
+<form>
+    <label for="lat">Coordinates</label>
+    <input type="text" id="lat" name="coordinates" required placeholder="e.g., 12.9716 77.5946">
+
+    <label for="Site">Site</label>
+    <select id="Site" name="site" required>
+      <option value="">Select Landmark</option>
+      <option value="BMIST">BMIST</option>
+      <option value="Green Circle">Green Circle</option>
+    </select>
+
+    <label for="Address">Address</label>
+    <input type="text" id="Address" name="address" required placeholder="e.g., Avalahalli Yelahanka">
+
+    <label for="City">City</label>
+    <input type="text" id="City" name="city" value="Bangalore" readonly>
+</form>
+</div>
+  <div id="map"></div>
+</div>
+<button class="share-button">Publish</button>
+
+ <!--<a href="/home" class="back-link">&larr; Back to Identification</a>--> 
+  </div>
+
+<div id="qrModal" class="qr-modal">
+  <div class="qr-modal-content">
+    <span id="closeModal" class="qr-close">✖</span>
+    <h2 id="qrTitle">QR Title</h2>
+
+    <!-- Loading spinner -->
+    <div id="qrLoading" style="margin-top: 20px;">
+      <p>Generating QR...</p>
+    </div>
+
+    <!-- QR Image (initially hidden) -->
+    <img id="qrImage" src="" alt="QR Code" style="width: 200px; margin-top: 15px; display: none;" />
+
+    <br><br>
+    <a id="downloadLink" href="#" download style="display: none;">
+      <button>Download QR</button>
+    </a>
+  </div>
+</div>
+
+<div class="overlay" onclick="toggleSidebar()"></div>
+
+
+
+  <script>
+    feather.replace();
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function (e) {
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+        //sidebar toggle
+    function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('active');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+
+
+    // This is called after the getdetails.html page loads
+  const uid = "{{.UID}}";
+  if (uid) {
+    history.replaceState(null, "", "/getdetails/" + uid);
+  }
+
+  const currentPath = window.location.pathname;
+
+  // First step: If not already at /getdetails and we haven't done the first reload
+  if (!sessionStorage.getItem("reloadedOnce") && !currentPath.startsWith("/getdetails")) {
+    sessionStorage.setItem("reloadedOnce", "true");
+    window.location.replace("/getdetails");
+  }
+
+  // Second step: After landing on /getdetails, now reload with UID if it's not already there
+  else if (sessionStorage.getItem("reloadedOnce") && uid && !currentPath.includes(uid)) {
+    sessionStorage.removeItem("reloadedOnce"); // Reset for future reloads if needed
+    window.location.replace(`/getdetails/${uid}`);
+  }
+
+  //add image
+
+function handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Get UID from URL like /getdetails/<uid>
+  const pathParts = window.location.pathname.split('/');
+  const uid = pathParts[pathParts.length - 1];
+  if (!uid) {
+    alert("UID not found in URL");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", file);
+  formData.append("uid", uid);
+
+  fetch("/append-image", {
+    method: "POST",
+    body: formData
+  })
+  .then(response => {
+    if (!response.ok) throw new Error("Failed to upload image");
+    return response.json(); // ✅ Expecting JSON { url: "..." }
+  })
+  .then(data => {
+    const cloudinaryUrl = data.url;
+    console.log("✅ Upload success:", cloudinaryUrl);
+
+    const imageSlots = document.querySelectorAll('.image-slot');
+    for (let slot of imageSlots) {
+      if (slot.children.length === 0 || slot.innerText === "+") {
+        slot.innerHTML = '';
+
+        // Add image
+        const img = document.createElement('img');
+        img.src = cloudinaryUrl;
+        img.alt = 'Uploaded Image';
+        img.style.width = "100%";
+        img.style.height = "auto";
+        slot.appendChild(img);
+
+        // Add remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.innerText = '×';
+        removeBtn.onclick = () => {
+          if (!confirm("Delete this image?")) return;
+
+          fetch("/delete-tree", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              uid: uid,
+              url: cloudinaryUrl
+            })
+          })
+          .then(res => {
+            if (!res.ok) throw new Error("Failed to delete");
+            return res.json();
+          })
+          .then(data => {
+            if (data.success) {
+              slot.innerHTML = '+'; // reset for reuse
+            } else {
+              alert("❌ Failed to delete image from server");
+            }
+          })
+          .catch(err => {
+            console.error("Delete failed:", err);
+            alert("Image deletion failed");
+          });
+        };
+
+        slot.appendChild(removeBtn);
+        break; // Only use first empty slot
+      }
+    }
+  })
+  .catch(err => {
+    console.error("Upload error:", err);
+    alert("Image upload failed");
+  });
+}
+
+  </script>
+
+   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script>
+  let map = L.map('map', {
+    center: [13.0827, 77.5742],
+    zoom: 13,
+    zoomControl: false,
+    attributionControl: false 
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  let marker;
+
+  // Try to locate the user
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+      const lat = position.coords.latitude.toFixed(6);
+      const lng = position.coords.longitude.toFixed(6);
+      map.setView([lat, lng], 15);
+      marker = L.marker([lat, lng]).addTo(map);
+      document.getElementById('lat').value = `${lat}, ${lng}`;
+    }, error => {
+      console.error("Geolocation failed:", error);
+    });
+  } else {
+    alert("Geolocation is not supported by your browser.");
+  }
+
+  // Update coordinates on map click
+  map.on('click', function(e) {
+    const lat = e.latlng.lat.toFixed(6);
+    const lng = e.latlng.lng.toFixed(6);
+    if (marker) {
+      marker.setLatLng(e.latlng);
+    } else {
+      marker = L.marker(e.latlng).addTo(map);
+    }
+    document.getElementById('lat').value = `${lat}, ${lng}`;
+  });
+</script>
+
+<script>
+  // Generic save function to reuse logic
+  async function saveAIData(uid) {
+    const scientificName = document.querySelector(".result-title")?.innerText.replace("Scientific Name: ", "") || "";
+    const responseText = document.querySelector(".result-content")?.innerText || "";
+
+    const coordinates = document.getElementById("lat")?.value || "";
+    const site = document.getElementById("Site")?.value || "";
+    const address = document.getElementById("Address")?.value || "";
+    const city = document.getElementById("City")?.value || "";
+
+    const data = {
+      scientificName,
+      responseText,
+      lastUpdated: new Date().toISOString(),
+      location: { coordinates, site, address, city }
+    };
+
+    try {
+      const res = await fetch(`/saveai/${uid}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const json = await res.json();
+      return json.message;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Failed to save.");
+    }
+  }
+
+  // Save button (just saves, no redirect)
+  document.getElementById("save-btn")?.addEventListener("click", async () => {
+    const uid = window.location.pathname.split("/").pop();
+    try {
+      const message = await saveAIData(uid);
+      alert(message);
+    } catch (e) {
+      alert(e.message);
+    }
+  });
+
+  // Save and go to /data_entry?id=...
+  document.getElementById("edit-manual-btn")?.addEventListener("click", async () => {
+    const uid = window.location.pathname.split("/").pop();
+    try {
+      const message = await saveAIData(uid);
+      alert(message);
+      window.location.href = `/data_entry?id=${uid}`;
+    } catch (e) {
+      alert(e.message);
+    }
+  });
+</script>
+
+
+<script>
+document.querySelector(".share-button").addEventListener("click", async () => {
+  const uid = window.location.pathname.split("/").pop();
+
+  const scientificName = document.querySelector(".result-title").innerText.replace("Scientific Name: ", "");
+  const responseText = document.querySelector(".result-content").innerText;
+
+  const coordinates = document.getElementById("lat").value;
+  const site = document.getElementById("Site").value;
+  const address = document.getElementById("Address").value;
+  const city = document.getElementById("City").value;
+
+  const data = {
+    scientificName,
+    responseText,
+    lastUpdated: new Date().toISOString(),
+    location: { coordinates, site, address, city }
+  };
+
+  // Show modal immediately and show loading indicator
+  const modal = document.getElementById("qrModal");
+  modal.classList.add("show");
+
+  document.getElementById("qrLoading").style.display = "block";
+  document.getElementById("qrImage").style.display = "none";
+  document.getElementById("downloadLink").style.display = "none";
+  document.getElementById("qrTitle").innerText = "Generating QR...";
+
+  try {
+    const publishRes = await fetch(`/publishsave/${uid}`, { method: "POST" });
+    if (!publishRes.ok) throw new Error("Publish failed");
+
+    const saveRes = await fetch(`/saveai/${uid}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    const saveJson = await saveRes.json();
+    if (!saveRes.ok) throw new Error(saveJson.message || "Save failed");
+
+    const generateRes = await fetch(`/generate-direct/${uid}`);
+    if (!generateRes.ok) {
+      const errorText = await generateRes.text();
+      throw new Error("QR generation failed: " + errorText);
+    }
+
+    const qrJson = await generateRes.json();
+
+    // Populate QR info
+    document.getElementById("qrTitle").innerText = "ID : " + qrJson.treeID;
+    document.getElementById("qrImage").src = "data:image/png;base64," + qrJson.qrBase64;
+    document.getElementById("downloadLink").href = "data:image/png;base64," + qrJson.qrBase64;
+    document.getElementById("downloadLink").download = `${qrJson.treeID}.png`;
+
+    // Hide loading and show content
+    document.getElementById("qrLoading").style.display = "none";
+    document.getElementById("qrImage").style.display = "block";
+    document.getElementById("downloadLink").style.display = "inline-block";
+
+  } catch (err) {
+    console.error("Error occurred:", err);
+    alert("Error: " + err.message);
+    modal.classList.remove("show");
+  }
+});
+
+// ✅ Close modal
+document.getElementById("closeModal").addEventListener("click", () => {
+  document.getElementById("qrModal").classList.remove("show");
+});
+
+  //voluenteer name
+  window.addEventListener('DOMContentLoaded', () => {
+    const email = localStorage.getItem("loggedInEmail");
+    const userSpan = document.getElementById("userEmail");
+
+    if (email && userSpan) {
+      userSpan.textContent = email;
+    } else {
+      userSpan.textContent = "Not logged in";
+    }
+  });
+</script>
+</body>
+</html>

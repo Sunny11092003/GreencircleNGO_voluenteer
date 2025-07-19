@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Leaflet Map – Live & Pick</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: system-ui, sans-serif;
+    }
+    #map {
+      height: 70vh;
+    }
+    #info {
+      padding: .9rem 1rem;
+      background: #f7f7f7;
+      border-top: 1px solid #ccc;
+      font-size: 15px;
+    }
+    .coord {
+      font-family: ui-monospace, monospace;
+      color: #2e7d32;
+    }
+    .form-wrapper {
+      padding: 1rem;
+      background: #f0f5ec;
+    }
+    .form-wrapper input {
+      padding: 8px;
+      margin: 8px 0;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #8bc34a;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #689f38;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+  <div id="info"><b>Status:</b> Initialising…</div>
+
+  <!-- Optional Form for Submitting Coordinates -->
+  <div class="form-wrapper">
+    <form action="/submit-coordinates" method="POST">
+      <input type="text" id="latitude" name="latitude" placeholder="Latitude" readonly />
+      <input type="text" id="longitude" name="longitude" placeholder="Longitude" readonly />
+      <button type="submit">Submit Coordinates</button>
+    </form>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    const $info = document.getElementById("info");
+    const $latInput = document.getElementById("latitude");
+    const $lngInput = document.getElementById("longitude");
+
+    const map = L.map("map").setView([20.5937, 78.9629], 5); // India center
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    const liveMarker = L.marker([20.5937, 78.9629], {
+      icon: L.divIcon({
+        html: '<div style="width:14px;height:14px;border-radius:50%;background:#1976d2;box-shadow:0 0 5px rgba(0,0,0,.5);"></div>',
+        className: '',
+      }),
+    }).addTo(map);
+
+    let pickMarker = null;
+
+    function updateStatus(text) {
+      $info.innerHTML = text;
+    }
+
+    function showCoords(prefix, lat, lng) {
+      updateStatus(`<b>${prefix}:</b> <span class="coord">${lat.toFixed(5)}, ${lng.toFixed(5)}</span>`);
+      $latInput.value = lat.toFixed(5);
+      $lngInput.value = lng.toFixed(5);
+    }
+
+    function fallbackToDefault() {
+      const lat = 20.5937, lng = 78.9629;
+      map.setView([lat, lng], 5);
+      liveMarker.setLatLng([lat, lng]);
+      updateStatus("❌ Couldn’t access GPS or IP. Showing default location.");
+    }
+
+    function tryIPFallback() {
+      fetch("https://ipapi.co/json")
+        .then(res => res.json())
+        .then(data => {
+          const { latitude: lat, longitude: lng } = data;
+          map.setView([lat, lng], 12);
+          liveMarker.setLatLng([lat, lng]);
+          showCoords("IP Location", lat, lng);
+        })
+        .catch(err => {
+          console.warn("IP location failed", err);
+          fallbackToDefault();
+        });
+    }
+
+    function startLocation() {
+      if (location.protocol !== "https:" && location.hostname !== "localhost") {
+        tryIPFallback();
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        tryIPFallback();
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          const { latitude: lat, longitude: lng } = pos.coords;
+          map.setView([lat, lng], 16);
+          liveMarker.setLatLng([lat, lng]);
+          showCoords("Live GPS", lat, lng);
+        },
+        err => {
+          console.warn("GPS error", err.message);
+          tryIPFallback();
+        },
+        { enableHighAccuracy: true, timeout: 7000, maximumAge: 0 }
+      );
+    }
+
+    // Map click handler to drop a marker
+    map.on("click", (e) => {
+      const { lat, lng } = e.latlng;
+      if (!pickMarker) {
+        pickMarker = L.marker([lat, lng], { draggable: true }).addTo(map);
+        pickMarker.on("dragend", (ev) => {
+          const pos = ev.target.getLatLng();
+          showCoords("Dragged to", pos.lat, pos.lng);
+        });
+      } else {
+        pickMarker.setLatLng([lat, lng]);
+      }
+      showCoords("Selected", lat, lng);
+    });
+
+    startLocation();
+  </script>
+</body>
+</html>

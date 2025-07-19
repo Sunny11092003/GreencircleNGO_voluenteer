@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Green Circle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    html,body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      height:100%;
+    }
+
+    .container {
+      display: flex;
+  height: 100vh; /* Full viewport height */
+    }
+
+    .sidebar {
+      width: 280px;
+      background-color: #FAFAFA;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid #eee;
+      height:100%;
+    }
+
+    .top {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .workspace {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .workspace img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .workspace-info {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      flex: 1;
+    }
+
+    .workspace-info span:first-child {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .workspace-info span:last-child {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    nav {
+      padding-left: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #4b5563;
+      position: relative;
+      text-decoration: none;
+      padding: 8px 0;
+      margin-bottom: 15px;
+    }
+
+    .nav-item.active {
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      height: 100%;
+      width: 4px;
+      background-color:#2e7d32;
+      border-radius: 1px;
+    }
+
+    .nav-item.logout {
+      color: #ef4444;
+      font-weight: 500;
+    }
+
+    .notification-badge {
+      background-color: #ef4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 999px;
+      position: absolute;
+      right: 0;
+      
+    }
+
+    .logout-button {
+  margin-top: auto; /* Push to bottom if using flex layout */
+  background-color: #efefef;
+  color: #6B7280;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #ffcccc;
+}
+
+.logout-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+  .menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* space between icon and text */
+}
+
+
+.menu-item svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.menu-item span {
+  font-size: 16px;
+  font-weight: 500;
+   }
+
+    .main-content {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 20px;
+      height: 90%;
+      overflow-y: auto; /* Optional: scroll if content overflows */
+    }
+
+.empty {
+  display: flex;
+  flex-direction: column;      /* Stack items vertically */
+  justify-content: center;     /* Vertical centering */
+  align-items: center;         /* Horizontal centering */
+  padding: 1rem;
+  text-align: center;
+}
+
+.empty img {
+  max-width: 350px;
+  height: 350px;
+}
+
+.tab-container {
+    display: flex;
+  width: max-content;     /* Fit width to content */
+  height: auto;           /* Let height be based on children */
+  width: 100%;
+  align-items: stretch;   /* Stretch tabs to same height */
+  border-bottom:1px solid rgba(229, 231, 235, 0.5);
+}
+
+.tab {
+  padding: 10px 30px;
+  border-radius: 12px 12px 0 0;
+  cursor: pointer;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.tab.active {
+  background-color: #f2f2ff; /* light lavender */
+  color: #2e7d32;            /* vibrant blue */
+  font-weight: bold;
+}
+
+a {
+  all: unset; /* resets all inherited and applied styles */
+}
+
+table {
+    width: 100%;
+    margin: 30px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #f5f5f5; /* Outer border */
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+}
+
+thead tr:first-child th:first-child {
+    border-top-left-radius: 5px;
+}
+thead tr:first-child th:last-child {
+    border-top-right-radius: 5px;
+}
+tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 5px;
+}
+tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 5px;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid #f5f5f5; /* Only top border for rows */
+    border-bottom: 1px solid #f5f5f5;
+    border-left: none;
+    border-right: none;
+    font-size: 16px;
+    font-weight: 400;
+}
+th {
+    background: #fafafa;
+    color: #4B5563;
+}
+
+#treeTable tbody tr:hover {
+    background-color: #f2f2ff; /* Light gray background on hover */
+    cursor: pointer;          /* Pointer cursor to indicate interactivity */
+  }
+
+  .in-progress-badge {
+  display: inline-block;
+  background-color: #fff7e6;
+  color: #a07924;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px; /* Fully rounded */
+  font-family: 'Inter', sans-serif;
+}
+
+.published-badge {
+  display: inline-block;
+  background-color: #e6f4ea;
+  color: #1e8e3e;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px; /* Fully rounded pill shape */
+  font-family: 'Inter', sans-serif;
+}
+
+.created-badge {
+  display: inline-block;
+  background-color: #e8f0fe;
+  color: #1a73e8;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px; /* Pill shape */
+  font-family: 'Inter', sans-serif;
+}
+
+
+.Download-btn{
+    color: #2e7d32; /* Tailwind's blue-500 */
+  border: 1px solid #2e7d32;
+  background-color: transparent;
+  border-radius: 9999px; /* Fully rounded */
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+#pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+}
+
+#pagination button {
+  padding: 6px 12px;
+  margin: 0 3px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+#pagination button.active {
+  background-color: #4F46E5;
+  color: white;
+  font-weight: bold;
+}
+
+#pagination button:hover {
+  background-color: #d1d5db;
+}
+
+#pagination span {
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.filter-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-icon {
+  width: 48px;
+  height: 48px;
+  background-color: #f5f6f8;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.filter-dropdown {
+  display: none;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 180px;
+  z-index: 10;
+}
+
+.filter-wrapper:hover .filter-dropdown,
+.filter-wrapper:focus-within .filter-dropdown {
+  display: block;
+}
+
+.filter-option {
+  padding: 10px 16px;
+  font-weight :400px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.filter-option:hover {
+  background-color: #f0f0f0;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.delete-btn:hover svg {
+  stroke: #EF4444; /* Subtle red stroke on hover */
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+table, tbody, tr, td {
+  overflow: visible !important;
+}
+
+#treeTable {
+  overflow: visible;
+}
+
+div[style*="position: relative"] {
+  overflow: visible !important;
+}
+
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 999; /* High value to appear above other elements */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 150px;
+  padding: 6px 0;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+
+.dropdown-content form {
+  margin: 0;
+  padding: 8px 16px;
+  text-align: left;
+}
+
+.dropdown-content form button {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #111827;
+}
+
+.hamburger {
+  display: none; /* Default: hidden on larger screens */
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 16px;
+  position: absolute;
+  top: 0px;
+  left: 340px;
+  z-index: 1001;
+}
+
+.mobile-header {
+  display: none;
+}
+
+/* Visible and animated only on mobile */
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FAFAFA;
+    padding: 12px 16px;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
+    transition: top 0.3s ease-in-out;
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+  
+  .mobile-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .hamburger {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background-color: #FAFAFA;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 999;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+
+  .action-bar {
+    display: none !important;
+  }
+
+  .scan{
+    position:absolute;
+    left:300px;
+    color:#9ca3af;
+  }
+
+.mobile-flex-container {
+    flex-direction: column;
+  }
+
+  .me{
+    display: none !important;
+  }
+
+  .left-content{
+    display:none !important;
+  }
+
+    .tab {
+    flex: 1 1 100% !important;           /* Full width on small screens */
+    padding: 12px !important;
+    font-size: 15px !important;
+  }
+
+  .event-card {
+    flex-direction: row; /* keep image left, content right */
+    flex-wrap: nowrap;
+  }
+
+  .event-image {
+    width: 40% !important; /* adjust as needed */
+    max-width: 35%;
+  }
+
+  .event-content {
+    width: 60% !important;
+    padding: 12px;
+  }
+
+  .event-title {
+    font-size: 16px;
+  }
+
+  .event-description{
+    display: none !important;
+  }
+
+  .event-details {
+    font-size: 12px;
+  }
+
+  .discount-tag {
+    display: none !important;
+  }
+
+  .me{
+    display:none;
+  }
+}
+
+@media (max-width: 768px) {
+  table {
+    border: 0;
+    width: 100%;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    display: block;
+    margin-bottom: 12px; /* Reduced spacing between cards */
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 6px; /* Reduced padding */
+  }
+
+  tbody td {
+    display: block;
+    text-align: left;
+    padding: 6px 8px; /* Reduced padding */
+    font-size: 14px;  /* Slightly smaller font */
+    border: none;
+    position: relative;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #4B5563;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 12px;
+  }
+
+  .Download-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+    margin-top: 4px;
+  }
+
+  .badge,
+  .published-badge,
+  .created-badge,
+  .in-progress-badge {
+display:none;
+  }
+
+  #pagination {
+    flex-wrap: wrap;
+    margin-top: 10px;
+    gap: 4px;
+  }
+
+  #pagination button {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+
+  .dropdown{
+    margin-top:-15px;
+  }
+
+  .dropdown-content{
+    margin-right:180px;
+  }
+
+  .ID{
+    font-weight: bolder;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <header class="mobile-header">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="logo">
+    <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+    <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+      Green Circle 
+    </span>
+  </div>
+  <p id="startScanBtn" class="scan">Scan</p>
+</header>
+<div class="container">
+  <div class="sidebar">
+    <div class="top">
+      <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+        <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+          Green Circle 
+        </span>
+      </div>
+
+  <div class="workspace" style="border: 1px solid rgba(229, 231, 235, 0.5);">
+  <img src="https://ui-avatars.com/api/?name=GC&background=00a884&color=fff" alt="Sample Image" />
+  <div class="workspace-info">
+    <span id="userEmail" style="font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 5px; font-size:14px;"></span>
+                <div class="volunteer-block">
+  <span id="published-count" style="font-family: 'Inter', sans-serif; font-size: 12px;">Loading...</span>
+</div>
+  </div>
+  <i data-feather="chevron-down" style="color: #9ca3af;" width="16" height="16"></i>
+</div>
+
+<nav>
+        <a href="/home" class="nav-item">
+        <div class="menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+            <title>home</title>
+            <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+            <polyline data-cap="butt" data-color="color-2" points="1 11 12 2 23 11" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <polyline data-cap="butt" points="10 23 10 17 14 17 14 23" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <path d="M4,13v8c0,1.105,.895,2,2,2h12c1.105,0,2-.895,2-2V13" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+          </g>
+        </svg>
+        <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Home</span>
+    </div>
+    </a>
+        <a id="libraryLink" href="#" class="nav-item active">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>app store</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <rect x="2" y="2" width="8" height="8" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect data-color="color-2" x="14.464" y="2.464" width="7.071" height="7.071" transform="translate(1.03 14.485) rotate(-45)" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="14" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="2" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: Arial, sans-serif;font-size: 14px;">My Library</span>
+  </div>
+</a>
+
+        <a href="/generate" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line-icon lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Generate Qr code</span>
+  </div>
+</a>
+
+        <a href="#" class="nav-item">
+        <div class="menu-item">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+          <title>alarm</title><g stroke-linejoin="miter" fill="currentcolor" stroke-linecap="butt" class="nc-icon-wrapper">
+            <path d="M19,13V8A7,7,0,0,0,5,8v5a13.834,13.834,0,0,1-2,7H21A13.834,13.834,0,0,1,19,13Z" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/> 
+            <path data-color="color-2" data-stroke="none" d="M9.174,22a3,3,0,0,0,5.652,0Z" fill="currnetcolor" stroke="none"/></g>
+          </svg>
+              <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Notification</span>
+              <span class="notification-badge">9</span>
+          </div>
+          </a>
+
+        <a href="#" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>cogwheel</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <path d="M23,13.5v-3l-3.248-.443a7.927,7.927,0,0,0-.9-2.165l1.984-2.61L18.718,3.161l-2.61,1.984a7.927,7.927,0,0,0-2.165-.9L13.5,1h-3l-.443,3.248a7.927,7.927,0,0,0-2.165.9L5.282,3.161,3.161,5.282l1.984,2.61a7.927,7.927,0,0,0-.9,2.165L1,10.5v3l3.248.443a7.927,7.927,0,0,0,.9,2.165l-1.984,2.61,2.121,2.121,2.61-1.984a7.927,7.927,0,0,0,2.165.9L10.5,23h3l.443-3.248a7.927,7.927,0,0,0,2.165-.9l2.61,1.984,2.121-2.121-1.984-2.61a7.927,7.927,0,0,0,.9-2.165Z" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <circle data-color="color-2" cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Settings</span>
+  </div>
+  </a>
+      </nav>
+    </div>
+
+    <a href="#" class="logout-button">
+  <div class="logout-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>logout</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+        <path d="M16,17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M21,12H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M12,2H5C3.895,2,3,2.895,3,4v16c0,1.105,0.895,2,2,2h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+      </g>
+    </svg>
+    <span>Logout</span>
+  </div>
+</a>
+
+<a href="#" style="text-decoration: none; margin-top :20px; font-size: 12px; margin-left:60px; color:#2e7d32;">? Help & Feedback</a>
+  </div>
+
+  <div class="main-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;">
+  <!-- Title -->
+  <h1 style="font-family: 'Archivo', sans-serif; font-size: 32px;">Library</h1>
+
+  <!-- Action Bar (Right Side) -->
+  <div class="action-bar" style="display: flex; align-items: center; gap: 16px;">
+    <!-- Search -->
+    <div class="search-bar" style="display: flex; align-items: center; background-color: #f5f6f8; padding: 10px 16px; border-radius: 9999px; width: 300px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#111827" viewBox="0 0 24 24">
+        <path d="M10 2a8 8 0 105.29 14.29l5.7 5.7 1.41-1.42-5.7-5.7A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+        </svg>
+      <span style="margin-right: 8px; color: #6b7280;"></span>
+      <input type="text" placeholder="Search" id="searchInput" style="border: none; background: transparent; outline: none; font-size: 16px; color: #6b7280; flex: 1;">
+    </div>
+
+    <!-- Filter Icon -->
+    <!-- Wrapper -->
+<div class="filter-wrapper" tabindex="0">
+  <!-- Icon -->
+  <div id="filterIcon" class="filter-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="gray" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 4h18" />
+      <path d="M5 8h14" />
+      <path d="M7 12h10" />
+      <path d="M11 16h2" />
+    </svg>
+  </div>
+
+  <!-- Dropdown -->
+  <div class="filter-dropdown">
+    <div class="filter-option" onclick="sortTable('latest')">Latest Created</div>
+    <div class="filter-option" onclick="sortTable('earliest')">Earliest Created</div>
+  </div>
+</div>
+
+
+
+    <!-- Record Button -->
+    <button style="background-color: #2e7d32; color: white; border: none; padding: 10px 16px; border-radius: 9999px; font-size: 16px; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line-icon lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+      <path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+      <span style="font-family: 'Archivo', sans-serif; font-size: 14px;">Scan QR</span>
+    </button>
+    
+  </div>
+</div>
+
+    <div class="tab-container">
+    <a id="libraryLink1" href="#"><div class="tab">Published</div></a>
+    <a id="draftLink" href="#"><div class="tab">Drafts</div></a>
+    <a id="qrLink"  href="#"><div class="tab active">QR Codes</div></a>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: 'Inter', sans-serif; color: #6b7280; margin-top: 20px;">
+  
+  <!-- Left Button -->
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <div class="me" style="display: flex; align-items: center; background-color: #f5f6f8; padding: 10px 30px; border-radius: 9999px; font-size: 14px; font-weight: 500; cursor: pointer;">
+      Recorded by me
+      <svg xmlns="http://www.w3.org/2000/svg" style="margin-left: 6px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </div>
+
+    <!-- Total Entries (now outside the pill) -->
+    <div id="entryCount" style="font-size: 14px;">
+  Total 0 Entries
+</div>
+  </div>
+
+  <!-- Right Icons -->
+  <div class="left-content" style="display: flex; gap: 10px;">
+    <div id="sortByDate" onclick="sortByDate()" style="display: flex; align-items: center; background-color: #f5f6f8; padding: 10px 15px; border-radius: 9999px; font-size: 14px; font-weight: 500; cursor: pointer;">
+      Sort by: Date
+      <svg xmlns="http://www.w3.org/2000/svg" style="margin-left: 6px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+{{if .}}
+<div style="position: relative; overflow: visible;">
+  <table id="treeTable">
+    <thead>
+      <tr style="font-family: 'Archivo', sans-serif;">
+        <th><b>Id</b></th>
+        <th><b>Name</b></th>
+        <th><b>Create date</b></th>
+        <th><b>Status</b></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .}}
+      <tr class="clickable-row" data-uid="{{.UID}}" style="cursor: pointer;">
+        <td class="ID">
+        {{.ID}}
+        </td>
+        <td>{{.Name}}</td>
+        <td class="created-date" data-timestamp="{{.Timestamp}}" style="color:#6b7280;"></td>
+        <td>
+        {{if .Published}}
+          <span class="published-badge">Published</span>
+        {{else if .Saved}}
+          <span class="in-progress-badge">In progress</span>
+        {{else}}
+          <span class="created-badge">QR Created</span>
+        {{end}}
+      </td>
+        <td>
+  <div class="dropdown">
+    <button class="menu-btn">⋮</button>
+    <div class="dropdown-content">
+      <form method="GET" action="/download-pdf">
+        <input type="hidden" name="id" value="{{.UID}}">
+        <input type="hidden" name="name" value="{{.Name}}">
+        <button type="submit">Download QR</button>
+      </form>
+      <form method="POST" action="/delete" onsubmit="return confirm('Are you sure you want to delete this record?');">
+        <input type="hidden" name="id" value="{{.ID}}">
+        <input type="hidden" name="email" value="{{.VolunteerName}}">
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+  </div>
+</td>
+
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  </div>
+<div style="margin-top: 20px; display: flex; justify-content:right;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left" style="margin-top:20px;"><path d="m15 18-6-6 6-6"/>
+</svg>
+  <div id="pagination"></div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right" style="margin-top:20px;"><path d="m9 18 6-6-6-6"/></svg>
+
+{{else}}
+  <div class="empty" style="position: relative; top: 0px;">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="400" viewBox="0 0 896 747.97143" role="img" artist="Katerina Limpitsouni" source="https://undraw.co/"><title>empty_cart</title><path d="M193.634,788.75225c12.42842,23.049,38.806,32.9435,38.806,32.9435s6.22712-27.47543-6.2013-50.52448-38.806-32.9435-38.806-32.9435S181.20559,765.7032,193.634,788.75225Z" transform="translate(-152 -76.01429)" fill="#2f2e41"/><path d="M202.17653,781.16927c22.43841,13.49969,31.08016,40.3138,31.08016,40.3138s-27.73812,4.92679-50.17653-8.57291S152,772.59636,152,772.59636,179.73811,767.66958,202.17653,781.16927Z" transform="translate(-152 -76.01429)" fill="#6c63ff"/><rect x="413.2485" y="35.90779" width="140" height="2" fill="#f2f2f2"/><rect x="513.2485" y="37.40779" width="2" height="18.5" fill="#f2f2f2"/><rect x="452.2485" y="37.40779" width="2" height="18.5" fill="#f2f2f2"/><rect x="484.2485" y="131.90779" width="140" height="2" fill="#f2f2f2"/><rect x="522.2485" y="113.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="583.2485" y="113.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="670.2485" y="176.90779" width="140" height="2" fill="#f2f2f2"/><rect x="708.2485" y="158.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="769.2485" y="158.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="656.2485" y="640.90779" width="140" height="2" fill="#f2f2f2"/><rect x="694.2485" y="622.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="755.2485" y="622.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="417.2485" y="319.90779" width="140" height="2" fill="#f2f2f2"/><rect x="455.2485" y="301.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="516.2485" y="301.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="461.2485" y="560.90779" width="140" height="2" fill="#f2f2f2"/><rect x="499.2485" y="542.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="560.2485" y="542.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="685.2485" y="487.90779" width="140" height="2" fill="#f2f2f2"/><rect x="723.2485" y="469.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="784.2485" y="469.90779" width="2" height="18.5" fill="#f2f2f2"/><polygon points="362.06 702.184 125.274 702.184 125.274 700.481 360.356 700.481 360.356 617.861 145.18 617.861 134.727 596.084 136.263 595.347 146.252 616.157 362.06 616.157 362.06 702.184" fill="#2f2e41"/><circle cx="156.78851" cy="726.03301" r="17.88673" fill="#3f3d56"/><circle cx="333.10053" cy="726.03301" r="17.88673" fill="#3f3d56"/><circle cx="540.92726" cy="346.153" r="11.07274" fill="#3f3d56"/><path d="M539.38538,665.76747H273.23673L215.64844,477.531H598.69256l-.34852,1.10753Zm-264.8885-1.7035H538.136l58.23417-184.82951H217.95082Z" transform="translate(-152 -76.01429)" fill="#2f2e41"/><polygon points="366.61 579.958 132.842 579.958 82.26 413.015 418.701 413.015 418.395 413.998 366.61 579.958" fill="#f2f2f2"/><polygon points="451.465 384.7 449.818 384.263 461.059 341.894 526.448 341.894 526.448 343.598 462.37 343.598 451.465 384.7" fill="#2f2e41"/><rect x="82.2584" y="458.58385" width="345.2931" height="1.7035" fill="#2f2e41"/><rect x="101.45894" y="521.34377" width="306.31852" height="1.7035" fill="#2f2e41"/><rect x="254.31376" y="402.36843" width="1.7035" height="186.53301" fill="#2f2e41"/><rect x="385.55745" y="570.79732" width="186.92877" height="1.70379" transform="translate(-274.73922 936.23495) rotate(-86.24919)" fill="#2f2e41"/><rect x="334.45728" y="478.18483" width="1.70379" height="186.92877" transform="translate(-188.46866 -52.99638) rotate(-3.729)" fill="#2f2e41"/><rect y="745" width="896" height="2" fill="#2f2e41"/><path d="M747.41068,137.89028s14.61842,41.60627,5.62246,48.00724S783.39448,244.573,783.39448,244.573l47.22874-12.80193-25.86336-43.73993s-3.37348-43.73992-3.37348-50.14089S747.41068,137.89028,747.41068,137.89028Z" transform="translate(-152 -76.01429)" fill="#a0616a"/><path d="M747.41068,137.89028s14.61842,41.60627,5.62246,48.00724S783.39448,244.573,783.39448,244.573l47.22874-12.80193-25.86336-43.73993s-3.37348-43.73992-3.37348-50.14089S747.41068,137.89028,747.41068,137.89028Z" transform="translate(-152 -76.01429)" opacity="0.1"/><path d="M722.87364,434.46832s-4.26731,53.34138,0,81.07889,10.66828,104.5491,10.66828,104.5491,0,145.08854,23.4702,147.22219,40.53945,4.26731,42.6731-4.26731-10.66827-12.80193-4.26731-17.06924,8.53462-19.20289,0-36.27213,0-189.8953,0-189.8953l40.53945,108.81641s4.26731,89.61351,8.53462,102.41544-4.26731,36.27213,10.66827,38.40579,32.00483-10.66828,40.53945-14.93559-12.80193-4.26731-8.53462-6.401,17.06924-8.53462,12.80193-10.66828-8.53462-104.54909-8.53462-104.54909S879.69728,414.1986,864.7617,405.664s-24.537,6.16576-24.537,6.16576Z" transform="translate(-152 -76.01429)" fill="#2f2e41"/><path d="M761.27943,758.78388v17.06924s-19.20289,46.39942,0,46.39942,34.13848,4.8083,34.13848-1.59266V763.05119Z" transform="translate(-152 -76.01429)" fill="#2f2e41"/><path d="M887.16508,758.75358v17.06924s19.20289,46.39941,0,46.39941-34.13848,4.80831-34.13848-1.59266V763.02089Z" transform="translate(-152 -76.01429)" fill="#2f2e41"/><circle cx="625.28185" cy="54.4082" r="38.40579" fill="#a0616a"/><path d="M765.54674,201.89993s10.66828,32.00482,27.73752,25.60386l17.06924-6.401L840.22467,425.9337s-23.47021,34.13848-57.60869,12.80193S765.54674,201.89993,765.54674,201.89993Z" transform="translate(-152 -76.01429)" fill="#6c63ff"/><path d="M795.41791,195.499l9.60145-20.26972s56.54186,26.67069,65.07648,35.20531,8.53462,21.33655,8.53462,21.33655l-14.93559,53.34137s4.26731,117.351,4.26731,121.61834,14.93559,27.73751,4.26731,19.20289-12.80193-17.06924-21.33655-4.26731-27.73751,27.73752-27.73751,27.73752Z" transform="translate(-152 -76.01429)" fill="#3f3d56"/><path d="M870.09584,349.12212l-6.401,59.74234s-38.40579,34.13848-29.87117,36.27214,12.80193-6.401,12.80193-6.401,14.93559,14.93559,23.47021,6.401S899.967,355.52309,899.967,355.52309Z" transform="translate(-152 -76.01429)" fill="#a0616a"/><path d="M778.1,76.14416c-8.51412-.30437-17.62549-.45493-24.80406,4.13321a36.31263,36.31263,0,0,0-8.5723,8.39153c-6.99153,8.83846-13.03253,19.95926-10.43553,30.92537l3.01633-1.1764a19.75086,19.75086,0,0,1-1.90515,8.46261c.42475-1.2351,1.84722.76151,1.4664,2.01085L733.543,139.792c5.46207-2.00239,12.25661,2.05189,13.08819,7.80969.37974-12.66123,1.6932-27.17965,11.964-34.59331,5.17951-3.73868,11.73465-4.88,18.04162-5.8935,5.81832-.935,11.91781-1.82659,17.49077.08886s10.31871,7.615,9.0553,13.37093c2.56964-.88518,5.44356.90566,6.71347,3.30856s1.33662,5.2375,1.37484,7.95506c2.73911,1.93583,5.85632-1.9082,6.97263-5.07112,2.62033-7.42434,4.94941-15.32739,3.53783-23.073s-7.72325-15.14773-15.59638-15.174a5.46676,5.46676,0,0,0,1.42176-3.84874l-6.48928-.5483a7.1723,7.1723,0,0,0,4.28575-2.25954C802.7981,84.73052,782.31323,76.29477,778.1,76.14416Z" transform="translate(-152 -76.01429)" fill="#2f2e41"/><path d="M776.215,189.098s-17.36929-17.02085-23.62023-15.97822S737.80923,189.098,737.80923,189.098s-51.20772,17.06924-49.07407,34.13848S714.339,323.51826,714.339,323.51826s19.2029,100.28179,2.13366,110.95006,81.07889,38.40579,83.21254,25.60386,6.401-140.82123,0-160.02412S776.215,189.098,776.215,189.098Z" transform="translate(-152 -76.01429)" fill="#3f3d56"/><path d="M850.89294,223.23648h26.38265S895.6997,304.31537,897.83335,312.85s6.401,49.07406,4.26731,49.07406-44.80675-8.53462-44.80675-2.13365Z" transform="translate(-152 -76.01429)" fill="#3f3d56"/><path d="M850,424.01429H749c-9.85608-45.34-10.67957-89.14649,0-131H850C833.70081,334.115,832.68225,377.62137,850,424.01429Z" transform="translate(-152 -76.01429)" fill="#f2f2f2"/><path d="M707.93806,368.325,737.80923,381.127s57.60868,8.53462,57.60868-14.93559-57.60868-10.66827-57.60868-10.66827L718.60505,349.383Z" transform="translate(-152 -76.01429)" fill="#a0616a"/><path d="M714.339,210.43455l-25.60386,6.401L669.53227,329.91923s-6.401,29.87117,4.26731,32.00482S714.339,381.127,714.339,381.127s4.26731-32.00483,12.80193-32.00483L705.8044,332.05288,718.60633,257.375Z" transform="translate(-152 -76.01429)" fill="#3f3d56"/><rect x="60.2485" y="352.90779" width="140" height="2" fill="#f2f2f2"/><rect x="98.2485" y="334.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="159.2485" y="334.90779" width="2" height="18.5" fill="#f2f2f2"/><rect x="109.2485" y="56.90779" width="140" height="2" fill="#f2f2f2"/><rect x="209.2485" y="58.40779" width="2" height="18.5" fill="#f2f2f2"/><rect x="148.2485" y="58.40779" width="2" height="18.5" fill="#f2f2f2"/><rect x="250.2485" y="253.90779" width="140" height="2" fill="#f2f2f2"/><rect x="350.2485" y="255.40779" width="2" height="18.5" fill="#f2f2f2"/><rect x="289.2485" y="255.40779" width="2" height="18.5" fill="#f2f2f2"/><rect x="12.2485" y="252.90779" width="140" height="2" fill="#f2f2f2"/><rect x="112.2485" y="254.40779" width="2" height="18.5" fill="#f2f2f2"/><rect x="51.2485" y="254.40779" width="2" height="18.5" fill="#f2f2f2"/><rect x="180.2485" y="152.90779" width="140" height="2" fill="#f2f2f2"/><rect x="218.2485" y="134.90779" width="2" height="18.5" fill="#f2f2f2"/>
+        <rect x="279.2485" y="134.90779" width="2" height="18.5" fill="#f2f2f2"/></svg>
+<h1 style="font-family: Arial, sans-serif;font-size:24px;">Create your first tree entry</h1>
+      <span style="font-family: Arial, sans-serif; font-size: 14px;">Fortunately, it's easy to create new one.</span>
+      </div>
+{{end}}
+
+    </div>
+  </div>
+  <div class="overlay" onclick="toggleSidebar()"></div>
+  <script>
+
+          //sidebar toggle
+    function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('active');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+
+    feather.replace();
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function (e) {
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+
+
+  function timeAgo(dateString) {
+    const date = new Date(dateString);
+    const seconds = Math.floor((new Date() - date) / 1000);
+
+    let interval = Math.floor(seconds / 31536000);
+    if (interval >= 1) return interval + " year" + (interval > 1 ? "s" : "") + " ago";
+
+    interval = Math.floor(seconds / 2592000);
+    if (interval >= 1) return interval + " month" + (interval > 1 ? "s" : "") + " ago";
+
+    interval = Math.floor(seconds / 86400);
+    if (interval >= 1) return interval + " day" + (interval > 1 ? "s" : "") + " ago";
+
+    interval = Math.floor(seconds / 3600);
+    if (interval >= 1) return interval + " hour" + (interval > 1 ? "s" : "") + " ago";
+
+    interval = Math.floor(seconds / 60);
+    if (interval >= 1) return interval + " minute" + (interval > 1 ? "s" : "") + " ago";
+
+    return "Just now";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".created-date").forEach(function (cell) {
+      const timestamp = cell.getAttribute("data-timestamp");
+      if (timestamp) {
+        cell.innerText = timeAgo(timestamp);
+      }
+    });
+  });
+  </script>
+<script>
+  //total enteries
+  window.addEventListener('DOMContentLoaded', () => {
+  const allRows = Array.from(document.querySelectorAll("#treeTable tbody tr"));
+  
+  // Set entry count
+  document.getElementById("entryCount").innerText = `Total ${allRows.length} Entries`;
+
+  // Call your pagination function
+  paginateTable(allRows, 10);
+});
+</script>
+<script>
+
+  //additional pages
+
+  function paginateTable(rows, rowsPerPage = 10) {
+  const tbody = document.querySelector("#treeTable tbody");
+  const pagination = document.getElementById("pagination");
+  let currentPage = 1;
+  
+
+  function renderPage(page) {
+    tbody.innerHTML = "";
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    rows.slice(start, end).forEach(row => tbody.appendChild(row));
+  }
+
+  function setupPagination() {
+    pagination.innerHTML = "";
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement("button");
+      btn.textContent = i;
+      btn.onclick = () => {
+        currentPage = i;
+        renderPage(i);
+      };
+      pagination.appendChild(btn);
+    }
+  }
+
+  renderPage(currentPage);
+  setupPagination();
+}
+
+
+//a href for each row
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".clickable-row").forEach(row => {
+    row.addEventListener("click", function (e) {
+      if (e.target.closest("button") || e.target.closest("form") || e.target.tagName === "INPUT") return;
+
+      const uid = this.getAttribute("data-uid");
+      if (uid) {
+        window.location.href = `/data_entry?id=${uid}`;
+      }
+    });
+  });
+});
+</script>
+<script>
+  //search js
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("searchInput");
+    input.addEventListener("input", function () {
+      const filter = this.value.toLowerCase();
+      const rows = document.querySelectorAll("#treeTable tbody tr");
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+      });
+    });
+  });
+</script>
+<script>
+
+  //filter options
+  const filterIcon = document.getElementById("filterIcon");
+  const filterPanel = document.getElementById("filterPanel");
+
+  filterIcon.addEventListener("click", () => {
+    filterPanel.style.display = filterPanel.style.display === "block" ? "none" : "block";
+  });
+
+  function sortTable(order) {
+    const rows = Array.from(document.querySelectorAll("#treeTable tbody tr"));
+    rows.sort((a, b) => {
+      const dateA = new Date(a.querySelector(".created-date").dataset.timestamp);
+      const dateB = new Date(b.querySelector(".created-date").dataset.timestamp);
+      return order === "latest" ? dateB - dateA : dateA - dateB;
+    });
+
+    const tbody = document.querySelector("#treeTable tbody");
+    tbody.innerHTML = "";
+    rows.forEach(row => tbody.appendChild(row));
+    filterPanel.style.display = "none";
+  }
+
+    //voluenteer name
+  window.addEventListener("DOMContentLoaded", () => {
+  const email = localStorage.getItem("loggedInEmail");
+  const userSpan = document.getElementById("userEmail");
+
+  if (email && userSpan) {
+    userSpan.textContent = email;
+  } else {
+    userSpan.textContent = "Not logged in";
+  }
+
+  // Set href for /qr-display
+  const qrLink = document.getElementById("qrLink");
+  if (email && qrLink) {
+    qrLink.href = `/qr-display?email=${encodeURIComponent(email)}`;
+  }
+
+  // Set href for /drafts
+  const draftLink = document.getElementById("draftLink");
+  if (email && draftLink) {
+    draftLink.href = `/drafts?email=${encodeURIComponent(email)}`;
+  }
+
+  // Set navigation for /library manually
+  document.getElementById("libraryLink").addEventListener("click", function () {
+    if (email) {
+      window.location.href = `/library?email=${encodeURIComponent(email)}`;
+    }
+  });
+
+    document.getElementById("libraryLink1").addEventListener("click", function () {
+    if (email) {
+      window.location.href = `/library?email=${encodeURIComponent(email)}`;
+    }
+  });
+
+          if (email) {
+      fetch(`/api/treecount?email=${encodeURIComponent(email)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          const countSpan = document.getElementById("published-count");
+          if (countSpan) {
+            countSpan.textContent = `${data.count} Published`;
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching tree count:", error);
+          const countSpan = document.getElementById("published-count");
+          if (countSpan) {
+            countSpan.textContent = "Error loading count";
+          }
+        });
+    }
+});
+
+</script>
+<script>
+  //delete require voluenteer name
+  document.addEventListener("DOMContentLoaded", () => {
+  const email = localStorage.getItem("loggedInEmail");
+  const hiddenInputs = document.querySelectorAll('input[name="email"]');
+
+  hiddenInputs.forEach(input => {
+    input.value = email;
+  });
+});
+
+
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Green Circle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    html,body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      height:100%;
+    }
+
+    .container {
+      display: flex;
+  height: 100vh; /* Full viewport height */
+    }
+
+    .sidebar {
+      width: 280px;
+      background-color: #FAFAFA;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid #eee;
+      height:100%;
+    }
+
+    .top {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .workspace {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .workspace img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .workspace-info {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      flex: 1;
+    }
+
+    .workspace-info span:first-child {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .workspace-info span:last-child {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    nav {
+      padding-left: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #4b5563;
+      position: relative;
+      text-decoration: none;
+      padding: 8px 0;
+      margin-bottom: 15px;
+    }
+
+    .nav-item.active {
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      height: 100%;
+      width: 4px;
+      background-color:#2e7d32;
+      border-radius: 1px;
+    }
+
+    .nav-item.logout {
+      color: #ef4444;
+      font-weight: 500;
+    }
+
+    .notification-badge {
+      background-color: #ef4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 999px;
+      position: absolute;
+      right: 0;
+      
+    }
+
+    .logout-button {
+  margin-top: auto; /* Push to bottom if using flex layout */
+  background-color: #efefef;
+  color: #6B7280;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #ffcccc;
+}
+
+.logout-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+  .menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* space between icon and text */
+}
+
+
+.menu-item svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.menu-item span {
+  font-size: 16px;
+  font-weight: 500;
+   }
+
+    .main-content {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 20px;
+      height: 90%;
+      overflow-y: auto; /* Optional: scroll if content overflows */
+    }
+
+
+a {
+  all: unset; /* resets all inherited and applied styles */
+}
+
+.container1 {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      max-width: 900px;
+    }
+
+    .left {
+      flex: 1;
+    }
+
+    .left h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .form-box {
+      flex: 2;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 30px;
+      margin-top:25px;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 90%;
+      padding: 10px 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input[type="password"] {
+      padding-right: 40px;
+    }
+
+    .form-group .eye-icon {
+      position: absolute;
+      right: 12px;
+      top: 36px;
+      cursor: pointer;
+    }
+
+    .btn {
+      background-color: #6366f1;
+      color: white;
+      padding: 10px 18px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #4f46e5;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .page-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.theme-toggle {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 20px;
+  font-family: 'Inter', sans-serif;
+  margin-top: -500px;
+}
+
+.theme-toggle label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 10px;
+  font-size: 15px;
+  color: #4B5563;
+}
+
+/* Hide the default checkbox */
+.theme-toggle input[type="checkbox"] {
+  display: none;
+}
+
+/* Custom toggle switch */
+.theme-toggle span::before {
+  content: "";
+  display: inline-block;
+  width: 42px;
+  height: 22px;
+  background-color: #ccc;
+  border-radius: 999px;
+  position: relative;
+  transition: background-color 0.3s;
+  vertical-align: middle;
+}
+
+.theme-toggle span::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+}
+
+/* Checked state */
+.theme-toggle input[type="checkbox"]:checked + span::before {
+  background-color: #4F46E5;
+}
+
+.theme-toggle input[type="checkbox"]:checked + span::after {
+  transform: translateX(20px);
+}
+
+
+
+/* Light mode (already default, but explicitly defining) */
+body.light-mode {
+  background-color: #ffffff;
+  color: #333;
+}
+
+body.light-mode .sidebar {
+  background-color: #FAFAFA;
+  border-right: 1px solid #eee;
+}
+
+body.light-mode .main-content,
+body.light-mode .form-box {
+  background-color: #ffffff;
+  color: #333;
+}
+
+body.light-mode input,
+body.light-mode .form-group input {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color:  #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.dark-mode .sidebar {
+  background-color: #1e1e1e;
+  border-right: 1px solid #333;
+}
+
+body.dark-mode .main-content,
+body.dark-mode .form-box {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.dark-mode .workspace,
+body.dark-mode .form-group input {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
+body.dark-mode .nav-item {
+  color: #ccc;
+}
+
+body.dark-mode .nav-item.active {
+  color: #90ee90;
+}
+
+body.dark-mode .btn {
+  background-color: #4f46e5;
+  color: white;
+}
+
+body.dark-mode .btn:hover {
+  background-color: #6366f1;
+}
+
+/* Light Mode (default) */
+body.light-mode .left p {
+  color: #111;
+}
+
+/* Dark Mode */
+body.dark-mode .left p {
+  color: #f0f0f0;
+}
+
+/* ========== Dark Mode ========== */
+body.dark-mode .hamburger {
+  color: #f9fafb; /* Light text */
+}
+
+body.dark-mode .mobile-header {
+  background-color: #1e1e1e;/* Gray-800 */
+  border-color: #1e1e1e;  /* Gray-700 */
+  color: #f9fafb;
+}
+
+.hamburger {
+  display: none; /* Default: hidden on larger screens */
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 16px;
+  position: absolute;
+  top: 0px;
+  left: 340px;
+  z-index: 1001;
+}
+
+.mobile-header {
+  display: none;
+}
+
+
+/* Visible and animated only on mobile */
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FAFAFA;
+    padding: 12px 16px;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
+    transition: top 0.3s ease-in-out;
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+  
+  .mobile-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .hamburger {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background-color: #FAFAFA;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 999;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+
+  .action-bar {
+    display: none !important;
+  }
+
+  .scan{
+    position:absolute;
+    left:300px;
+    color:#9ca3af;
+  }
+
+.mobile-flex-container {
+    flex-direction: column;
+  }
+
+  .upload {
+    order: -1; 
+    margin-top:-70px;
+    margin-left:-40px;
+  }
+
+  .latest {
+    order: 1;
+  }
+
+   #uploadDiv {
+    padding: 20px 30px;
+    margin: 20px auto 0 auto;
+    height: 100px !important;
+    width: 65% !important;
+  }
+
+  #uploadDiv svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .latest{
+    margin-left:-20px;
+  }
+
+  .contributor
+  {
+    margin-left:-20px;
+  }
+
+    .kanban-container {
+      display: flex;
+      flex-direction: column;
+      gap: 5px !important; /* reduces spacing */
+    }
+
+    .kanban-column {
+      width: 100% !important;
+      margin-bottom: 20px;
+      position: static !important; /* Overrides any absolute */
+    }
+
+    .kanban-column [style*="position:absolute"] {
+      position: static !important;
+      width: 100% !important;
+    }
+
+      .kanban-column {
+      width: 30% !important;  /* Increased from default */
+      max-width: 100% !important;
+      margin: 6px 0 !important;
+    }
+
+    .report-title{
+      margin-top:-40px;
+      margin-bottom:-20px;
+    }
+
+    .report-title h2 {
+    font-size: 23px;
+    }
+
+    .latest > div {
+    width: 106% !important;
+  }
+
+  .contributor > div 
+   {
+    width :106% !important;
+   }
+}
+
+@media (max-width: 768px) {
+  .container1 {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 16px;
+    max-width: 80%;
+  }
+
+  .left,
+  .form-box {
+    width: 100%;
+    flex: unset;
+  }
+
+  .left h2 {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .form-box {
+    padding: 20px;
+    margin-top: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .form-group input {
+    width: 80%;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .toggle-password {
+    font-size: 13px;
+    right: 10px;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .theme-toggle {
+    margin-top:-485px;
+    margin-right:-20px;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+<header class="mobile-header">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="logo">
+    <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+    <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+      Green Circle 
+    </span>
+  </div>
+  <p id="startScanBtn" class="scan">Scan</p>
+</header>
+<div class="container">
+  <div class="sidebar">
+    <div class="top">
+      <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+        <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+          Green Circle 
+        </span>
+      </div>
+
+  <div class="workspace" style="border: 1px solid rgba(229, 231, 235, 0.5);">
+  <img src="https://ui-avatars.com/api/?name=GC&background=00a884&color=fff" alt="Sample Image" />
+  <div class="workspace-info">
+    <span id="userEmail" style="font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 5px; font-size:14px;"></span>
+    <span style="font-family: 'Inter', sans-serif; font-size: 12px;" >10 entries</span>
+  </div>
+  <i data-feather="chevron-down" style="color: #9ca3af;" width="16" height="16"></i>
+</div>
+
+<nav>
+        <a href="/home" class="nav-item">
+        <div class="menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+            <title>home</title>
+            <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+            <polyline data-cap="butt" data-color="color-2" points="1 11 12 2 23 11" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <polyline data-cap="butt" points="10 23 10 17 14 17 14 23" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <path d="M4,13v8c0,1.105,.895,2,2,2h12c1.105,0,2-.895,2-2V13" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+          </g>
+        </svg>
+        <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Home</span>
+    </div>
+    </a>
+        <a id="libraryLink" href="#" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>app store</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <rect x="2" y="2" width="8" height="8" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect data-color="color-2" x="14.464" y="2.464" width="7.071" height="7.071" transform="translate(1.03 14.485) rotate(-45)" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="14" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="2" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: Arial, sans-serif;font-size: 14px;">My Library</span>
+  </div>
+</a>
+
+        <a href="/generate" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line-icon lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Generate Qr code</span>
+  </div>
+</a>
+
+        <a href="#" class="nav-item">
+        <div class="menu-item">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+          <title>alarm</title><g stroke-linejoin="miter" fill="currentcolor" stroke-linecap="butt" class="nc-icon-wrapper">
+            <path d="M19,13V8A7,7,0,0,0,5,8v5a13.834,13.834,0,0,1-2,7H21A13.834,13.834,0,0,1,19,13Z" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/> 
+            <path data-color="color-2" data-stroke="none" d="M9.174,22a3,3,0,0,0,5.652,0Z" fill="currnetcolor" stroke="none"/></g>
+          </svg>
+              <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Notification</span>
+              <span class="notification-badge">9</span>
+          </div>
+          </a>
+
+        <a href="#" class="nav-item active">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>cogwheel</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <path d="M23,13.5v-3l-3.248-.443a7.927,7.927,0,0,0-.9-2.165l1.984-2.61L18.718,3.161l-2.61,1.984a7.927,7.927,0,0,0-2.165-.9L13.5,1h-3l-.443,3.248a7.927,7.927,0,0,0-2.165.9L5.282,3.161,3.161,5.282l1.984,2.61a7.927,7.927,0,0,0-.9,2.165L1,10.5v3l3.248.443a7.927,7.927,0,0,0,.9,2.165l-1.984,2.61,2.121,2.121,2.61-1.984a7.927,7.927,0,0,0,2.165.9L10.5,23h3l.443-3.248a7.927,7.927,0,0,0,2.165-.9l2.61,1.984,2.121-2.121-1.984-2.61a7.927,7.927,0,0,0,.9-2.165Z" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <circle data-color="color-2" cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Settings</span>
+  </div>
+  </a>
+      </nav>
+    </div>
+
+    <a href="#" class="logout-button">
+  <div class="logout-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>logout</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+        <path d="M16,17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M21,12H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M12,2H5C3.895,2,3,2.895,3,4v16c0,1.105,0.895,2,2,2h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+      </g>
+    </svg>
+    <span>Logout</span>
+  </div>
+</a>
+
+<a href="#" style="text-decoration: none; margin-top :20px; font-size: 12px; margin-left:60px; color:#2e7d32;">? Help & Feedback</a>
+  </div>
+
+  <div class="main-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;">
+  <!-- Title -->
+  <h1 style="font-family: 'Archivo', sans-serif; font-size: 32px;">Settings</h1>
+</div>
+
+<div class="container1">
+    <div class="left">
+      <p class="page-title">Change Password</p>
+    </div>
+
+<div class="form-box">
+  <form id="changePasswordForm">
+    <div class="form-group">
+      <label for="currentPassword">Current password</label>
+      <div class="input-wrapper">
+        <input type="password" id="currentPassword" placeholder="Enter current password" required />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="newPassword">New password</label>
+      <div class="input-wrapper">
+        <input type="password" id="newPassword" placeholder="Enter new password" required />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm new password</label>
+      <div class="input-wrapper">
+        <input type="password" id="confirmPassword" placeholder="Confirm new password" required />
+      </div>
+    </div>
+
+    <button type="submit" class="btn" style="margin-top:10px;">Change password</button>
+    <p id="statusMsg" style="color:green; margin-top:10px;"></p>
+  </form>
+</div>
+  </div>
+
+  <div class="theme-toggle">
+  <label>
+    <input type="checkbox" id="themeSwitch" />
+    <span> Dark Mode</span>
+  </label>
+</div>
+
+    </div>
+  </div>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <script>
+
+        //sidebar toggle
+    function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('active');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+
+    feather.replace();
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function (e) {
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+    //voluenterr name
+document.addEventListener("DOMContentLoaded", () => {
+  const email = localStorage.getItem("loggedInEmail");
+
+  const userSpan = document.getElementById("userEmail");
+  if (email && userSpan) {
+    userSpan.textContent = email;
+  } else if (userSpan) {
+    userSpan.textContent = "Not logged in";
+  }
+
+  const libraryLink = document.getElementById("libraryLink");
+  if (email && libraryLink) {
+    libraryLink.href = `/library?email=${encodeURIComponent(email)}`;
+  }
+});
+
+document.querySelector("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = localStorage.getItem("loggedInEmail");
+  const currentPassword = document.getElementById("currentPassword").value;
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (newPassword !== confirmPassword) {
+    alert("New password and confirmation do not match.");
+    return;
+  }
+
+  const response = await fetch("/change-password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      currentPassword,
+      newPassword,
+    }),
+  });
+
+  const result = await response.json();
+  if (response.ok) {
+    alert("Password changed successfully!");
+    e.target.reset(); // ✅ Reset the form
+  } else {
+    alert(`Failed to change password: ${result.error || "Unknown error"}`);
+  }
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const themeSwitch = document.getElementById("themeSwitch");
+
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.body.classList.add(savedTheme + "-mode");
+    themeSwitch.checked = savedTheme === "dark";
+
+    themeSwitch.addEventListener("change", () => {
+      if (themeSwitch.checked) {
+        document.body.classList.replace("light-mode", "dark-mode");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.body.classList.replace("dark-mode", "light-mode");
+        localStorage.setItem("theme", "light");
+      }
+    });
+  });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Green Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Arial, sans-serif;
+  position: relative;
+  height: 100vh;
+  margin: 0;
+  color: #fff;
+  overflow: hidden;
+  z-index: 0;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://plus.unsplash.com/premium_photo-1675177698286-8c3edc5de261?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA1fHx0cmVlc3xlbnwwfHwwfHx8MA%3D%3D') center/cover no-repeat;
+  filter: blur(5px);
+  z-index: -1;
+  transform: scale(1.05); /* prevents edge cropping */
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4); /* dark overlay */
+  z-index: -1;
+}
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 32px;
+    }
+
+    .navbar nav a {
+      color: white;
+      margin: 0 14px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .navbar .buttons button {
+      margin-left: 10px;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+.navbar .buttons .signin {
+  background: transparent;
+  color: white;
+  border: 1px solid #fff;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar .buttons .signin:hover {
+  background-color: #fff;
+  color: #2e7d32;
+}
+
+.navbar .buttons .signup {
+  background-color: #8bc34a;
+  color: #000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar .buttons .signup:hover {
+  background-color: #689f38;
+  color: #fff;
+}
+
+
+        .logo {
+      font-size: 32px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+
+    .login-container {
+      max-width: 400px;
+      width: 100%;
+      padding: 40px 30px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 600;
+      color: #1c1c1c;
+      margin-bottom: 32px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper input {
+      padding-right: 45px;
+    }
+
+    .password-wrapper button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 44px;
+      background-color: #8bc34a;
+      border: none;
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+      cursor: pointer;
+    }
+
+    .password-wrapper button i {
+      color: white;
+      font-size: 16px;
+    }
+
+    .sign-in-btn {
+      width: 100%;
+      background-color: #8bc34a;
+      color: white;
+      padding: 12px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .sign-in-btn:hover {
+  background-color: #689f38; /* darker green for hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+a {
+  all: unset; /* resets all inherited and applied styles */
+}
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .options a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .options a:hover {
+      text-decoration: underline;
+    }
+
+    .login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 64px); /* adjust based on navbar height */
+}
+
+    @media (max-width: 768px) {
+      .hero {
+        padding-top: 60px;
+      }
+
+      .floating-image {
+        position: static;
+        margin-top: 20px;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+          <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 45px; width: 45px;" />
+<span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #ffffff; ">
+  <a href="/">Green Circle Volunteer</a>
+</span>
+
+      </div>
+    <div class="buttons">
+      <a href="/signin"><button class="signin">Sign in</button></a>
+      <a href="/signup"><button class="signup">Sign up</button></a>
+    </div>
+  </div>
+  <div class="login-wrapper">
+<div class="login-container">
+  <h1>Sign in</h1>
+
+    <label for="email">Email address / Username *</label>
+    <input type="text" id="email" name="email" placeholder="Enter your email" required />
+
+    <label for="password">Password *</label>
+    <div class="password-wrapper">
+      <input type="password" id="password" name="password" placeholder="Enter your password" required />
+    </div>
+
+  <button class="sign-in-btn" onclick="loginUser()">Sign in</button>
+
+  <div class="options">
+    <a href="/signup">Create an account</a>
+    <a href="#">Forgot password?</a>
+  </div>
+</div>
+
+  </div>
+<script>
+  async function loginUser() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+      });
+
+      const text = await response.text();
+
+      if (response.ok && text.trim() === "success") {
+        localStorage.setItem("loggedInEmail", email);
+        window.location.href = "/home";
+ 
+      } else {
+        alert(text || "Login failed. Please try again.");  // ❌ Error message
+      }
+    } catch (err) {
+      alert("Network error. Try again.");
+    }
+  }
+</script>
+
+</body>
+</html>

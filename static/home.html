@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Green Circle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    html,body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      height:100%;
+    }
+
+    .container {
+      display: flex;
+  height: 100vh; /* Full viewport height */
+    }
+
+    .sidebar {
+      width: 280px;
+      background-color: #FAFAFA;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid #eee;
+      height:100%;
+    }
+
+/* When open */
+.sidebar.open {
+  left: 0;
+}
+
+    .top {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .workspace {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .workspace img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .workspace-info {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      flex: 1;
+    }
+
+    .workspace-info span:first-child {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .workspace-info span:last-child {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    nav {
+      padding-left: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #4b5563;
+      position: relative;
+      text-decoration: none;
+      padding: 8px 0;
+      margin-bottom: 15px;
+    }
+
+    .nav-item.active {
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      height: 100%;
+      width: 4px;
+      background-color:#2e7d32;
+      border-radius: 1px;
+    }
+
+    .nav-item.logout {
+      color: #ef4444;
+      font-weight: 500;
+    }
+
+    .notification-badge {
+      background-color: #ef4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 999px;
+      position: absolute;
+      right: 0;
+      
+    }
+
+    .logout-button {
+  margin-top: auto; /* Push to bottom if using flex layout */
+  background-color: #efefef;
+  color: #6B7280;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #ffcccc;
+}
+
+.logout-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+  .menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* space between icon and text */
+}
+
+
+.menu-item svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.menu-item span {
+  font-size: 16px;
+  font-weight: 500;
+   }
+
+    .main-content {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 20px;
+      height: 90%;
+      overflow-y: auto; /* Optional: scroll if content overflows */
+      width: 100%;
+  overflow-x: auto; 
+    }
+
+    .banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #f5f5ff;
+      color: #2e7d32;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    .banner-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .banner-icon {
+      font-size: 14px;
+    }
+
+    .banner-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .banner a {
+      color: #3b82f6;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .banner-close {
+      cursor: pointer;
+      color: #999;
+      font-size: 16px;
+    }
+
+    .banner-close:hover {
+      color: #555;
+    }
+
+    .empty
+    {
+    margin-left:350px;
+    margin-top:0px;
+    }
+
+    h2 {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #333;
+    }
+
+    .overview-container {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .card {
+      flex: 1;
+      padding: 20px;
+      border-radius: 12px;
+      background: #f5f7ff;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .card:nth-child(2) {
+      background: #fff3f3;
+    }
+
+    .card:nth-child(3) {
+      background: #f0f9ff;
+    }
+
+    .card-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 6px;
+      border-radius: 8px;
+    }
+
+    .card h4 {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    .card .value {
+      font-size: 24px;
+      font-weight: 600;
+      color: #000;
+    }
+
+    .card .change {
+      font-size: 12px;
+      color: green;
+      margin-top: 6px;
+    }
+
+    .card-icon {
+  margin-bottom: 10px;
+}
+
+.card h4 {
+  margin: 10px 0;
+}
+
+.value {
+  margin: 10px 0;
+}
+
+.change {
+  margin-top: 10px;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    font-family: 'Inter', sans-serif;
+    margin-left: -20px; 
+    margin-top:30px;
+  }
+
+  .report-title {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #000;
+  }
+
+  .report-title i {
+    color: #2e7d32;
+    margin-right: 8px;
+    font-size: 18px;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  .button-group button {
+    border: 1px solid #2e7d32;
+    background: #fff;
+    color: #2e7d32;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .button-group button:hover {
+    background: #f5f3ff;
+  }
+
+  .button-group button i {
+    margin-right: 6px;
+    font-size: 14px;
+  }
+
+  /* Container that holds all columns */
+.kanban-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 30px;
+  width: 1170px; /* Make sure it's at least 1100px */
+  margin: 0 auto; /* Center horizontally */
+  padding: 20px;
+  margin-left:-20px;
+  font-family: 'Inter',sans-serif;
+   position: relative;
+}
+
+/* Each column box */
+.kanban-column {
+  width: 100%;
+  max-width: 270px;
+  flex-shrink: 0;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fff;
+  padding: 15px;
+  box-sizing: border-box;
+  height:170px;
+  font-size: 14px;
+  color: #6b7280;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Make only the first column grow */
+.kanban-column:first-child {
+  flex-grow: 1;
+   height: auto;
+}
+
+.kanban-column:nth-child(4) {
+  flex-grow: 1;
+  height: auto;
+}
+
+.kanban-column:nth-child(6) {
+  flex-grow: 1;
+  height: auto;
+  position : absolute;
+  top:220px;
+  left:620px;
+}
+
+.kanban-column:nth-child(5) {
+  position: absolute;
+  top:220px; /* adjust as needed based on Peepal height */
+  left: 320px; /* adjust to match right of first column */
+}
+
+.kanban-column:nth-child(9) {
+  position: absolute;
+  top:434px;
+  left: 920px; /* adjust to match right of first column */
+}
+
+.kanban-column:nth-child(10) {
+  position: absolute;
+  top:630px;
+  left: 20px; /* adjust to match right of first column */
+}
+
+.kanban-column:nth-child(11) {
+  flex-grow: 1;
+  height: auto;
+  position: absolute;
+  top:630px;
+  left:320px;
+}
+
+.kanban-column:nth-child(12) {
+  position: absolute;
+  top:630px;
+  left:620px;
+}
+
+.kanban-column.shade {
+  order: 5; /* ensure it wraps to second row after the first few columns */
+}
+
+/* Column title */
+.kanban-column h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  text-align: center;
+  margin-top:-2px;
+}
+
+/* Task image */
+.kanban-card img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+/* Task title */
+.task-title {
+  margin-bottom: 10px;
+}
+
+/* Color tags */
+.tags {
+  background-color: #ededff;      /* soft violet background */
+  color: #2e7d32;                 /* soft blue-violet text */
+  padding: 2px 10px;              /* inner spacing */
+  border-radius: 999px;           /* pill shape */
+  font-size: 12px;                /* small text */
+  font-weight: 500;
+  display: inline-block;
+  line-height: 1.4;
+  margin-right: 4px;
+}
+
+/* Comment and like row */
+.meta {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 12px;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* Stack cards with spacing inside a column */
+.card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+a {
+  all: unset; /* resets all inherited and applied styles */
+}
+#scannerContainer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 20, 40, 0.95); /* dark overlay */
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  backdrop-filter: blur(5px); /* smooth background blur */
+}
+
+#qr-reader {
+  width: 300px;
+  height: 300px;
+  border: 3px solid #2e7d32;
+  border-radius: 18px;
+  box-shadow: 0 0 25px #8b5cf6;
+  background-color: #000;
+  position: relative;
+}
+
+#closeScan {
+  margin-top: 20px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#closeScan:hover {
+  background-color: #dc2626;
+}
+
+/* Optional fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+#qr-reader {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.event-card {
+  display: flex;
+  border: 1px solid #efeeee;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 20px 0 20px 5px;
+  font-family: 'Inter', sans-serif;
+  max-width: 1200px;
+  height: 120px; /* Fixed height */
+}
+
+.event-image {
+  flex: 0 0 160px;
+  height: 100%;
+  background-color: #f1f2f6;
+}
+
+.event-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-content {
+  flex: 1;
+  padding: 12px 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.discount-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #2e7d32;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+
+.price-text {
+  color: #6c5ce7;
+  margin: 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.event-title {
+  margin: 4px 0 8px;
+  font-size: 16px;
+}
+
+.event-description,
+.event-details {
+  font-size: 13px;
+  color: #2d3436;
+  line-height: 1.4;
+  white-space: normal;           /* allow wrapping */
+  word-wrap: break-word;
+  overflow: visible;
+  text-overflow: unset;          /* no ellipsis */
+}
+
+.event-details {
+  margin-bottom: 4px; /* Reduce bottom spacing */
+}
+
+.event-description {
+  margin-top: 0; /* Remove top spacing */
+}
+
+.event-content > * {
+  margin: 6px 0;
+}
+
+.event-title {
+  font-family:'Archivo' sans-serif;
+  font-size: 16px;
+  margin: 6px 0; /* override if needed */
+}
+
+.event-details {
+  font-size: 13px;
+  color: #636e72;
+  line-height: 1.4;
+  margin: 6px 0;
+}
+
+.event-description {
+  font-size: 13px;
+  color: #2d3436;
+  margin: 6px 0;
+}
+
+#fileInput {
+  display: none; /* completely hidden */
+}
+
+.hamburger {
+  display: none; /* Default: hidden on larger screens */
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 16px;
+  position: absolute;
+  top: 0px;
+  left: 340px;
+  z-index: 1001;
+}
+
+.mobile-header {
+  display: none;
+}
+
+
+/* Visible and animated only on mobile */
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FAFAFA;
+    padding: 12px 16px;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
+    transition: top 0.3s ease-in-out;
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+  
+  .mobile-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .hamburger {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background-color: #FAFAFA;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 999;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+
+  .action-bar {
+    display: none !important;
+  }
+
+  .scan{
+    position:absolute;
+    left:300px;
+    color:#9ca3af;
+  }
+
+.mobile-flex-container {
+    flex-direction: column;
+  }
+
+  .upload {
+    order: -1; 
+    margin-top:-70px;
+    margin-left:-40px;
+  }
+
+  .latest {
+    order: 1;
+  }
+
+   #uploadDiv {
+    padding: 20px 30px;
+    margin: 20px auto 0 auto;
+    height: 100px !important;
+    width: 65% !important;
+  }
+
+  #uploadDiv svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .latest{
+    margin-left:-20px;
+  }
+
+  .contributor
+  {
+    margin-left:-20px;
+  }
+
+    .kanban-container {
+      display: flex;
+      flex-direction: column;
+      gap: 5px !important; /* reduces spacing */
+    }
+
+    .kanban-column {
+      width: 100% !important;
+      margin-bottom: 20px;
+      position: static !important; /* Overrides any absolute */
+    }
+
+    .kanban-column [style*="position:absolute"] {
+      position: static !important;
+      width: 100% !important;
+    }
+
+      .kanban-column {
+      width: 30% !important;  /* Increased from default */
+      max-width: 100% !important;
+      margin: 6px 0 !important;
+    }
+
+    .report-title{
+      margin-top:-40px;
+      margin-bottom:-20px;
+    }
+
+    .report-title h2 {
+    font-size: 23px;
+    }
+
+    .latest > div {
+    width: 106% !important;
+  }
+
+  .contributor > div 
+   {
+    width :106% !important;
+   }
+    
+}
+</style>
+</head>
+<body>
+<header class="mobile-header">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="logo">
+    <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+    <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+      Green Circle 
+    </span>
+  </div>
+  <p id="startScanBtn" class="scan">Scan</p>
+</header>
+
+
+<div class="container">
+  <div class="sidebar">
+    <div class="top">
+      <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+        <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+          Green Circle 
+        </span>
+      </div>
+
+  <div class="workspace" style="border: 1px solid rgba(229, 231, 235, 0.5);">
+  <img src="https://ui-avatars.com/api/?name=GC&background=00a884&color=fff" alt="Sample Image" />
+  <div class="workspace-info">
+    <span id="userEmail" style="font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 5px; font-size:14px;"></span>
+    <div class="volunteer-block">
+  <span id="published-count" style="font-family: 'Inter', sans-serif; font-size: 12px;">Loading...</span>
+</div>
+
+  </div>
+  <i data-feather="chevron-down" style="color: #9ca3af;" width="16" height="16"></i>
+</div>
+
+<nav>
+        <a href="/home" class="nav-item active">
+        <div class="menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+            <title>home</title>
+            <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+            <polyline data-cap="butt" data-color="color-2" points="1 11 12 2 23 11" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <polyline data-cap="butt" points="10 23 10 17 14 17 14 23" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <path d="M4,13v8c0,1.105,.895,2,2,2h12c1.105,0,2-.895,2-2V13" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+          </g>
+        </svg>
+        <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Home</span>
+    </div>
+    </a>
+
+        <a id="libraryLink" href="#" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>app store</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <rect x="2" y="2" width="8" height="8" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect data-color="color-2" x="14.464" y="2.464" width="7.071" height="7.071" transform="translate(1.03 14.485) rotate(-45)" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="14" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="2" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: Arial, sans-serif;font-size: 14px;">My Library</span>
+  </div>
+</a>
+
+        <a href="/generate" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line-icon lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Generate Qr code</span>
+  </div>
+</a>
+
+        <a href="#" class="nav-item">
+        <div class="menu-item">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+          <title>alarm</title><g stroke-linejoin="miter" fill="currentcolor" stroke-linecap="butt" class="nc-icon-wrapper">
+            <path d="M19,13V8A7,7,0,0,0,5,8v5a13.834,13.834,0,0,1-2,7H21A13.834,13.834,0,0,1,19,13Z" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/> 
+            <path data-color="color-2" data-stroke="none" d="M9.174,22a3,3,0,0,0,5.652,0Z" fill="currnetcolor" stroke="none"/></g>
+          </svg>
+              <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Notification</span>
+              <span class="notification-badge">9</span>
+          </div>
+          </a>
+
+        <a href="/settings" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>cogwheel</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <path d="M23,13.5v-3l-3.248-.443a7.927,7.927,0,0,0-.9-2.165l1.984-2.61L18.718,3.161l-2.61,1.984a7.927,7.927,0,0,0-2.165-.9L13.5,1h-3l-.443,3.248a7.927,7.927,0,0,0-2.165.9L5.282,3.161,3.161,5.282l1.984,2.61a7.927,7.927,0,0,0-.9,2.165L1,10.5v3l3.248.443a7.927,7.927,0,0,0,.9,2.165l-1.984,2.61,2.121,2.121,2.61-1.984a7.927,7.927,0,0,0,2.165.9L10.5,23h3l.443-3.248a7.927,7.927,0,0,0,2.165-.9l2.61,1.984,2.121-2.121-1.984-2.61a7.927,7.927,0,0,0,.9-2.165Z" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <circle data-color="color-2" cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Settings</span>
+  </div>
+  </a>
+      </nav>
+    </div>
+
+    <a href="/" class="logout-button">
+  <div class="logout-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>logout</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+        <path d="M16,17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M21,12H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M12,2H5C3.895,2,3,2.895,3,4v16c0,1.105,0.895,2,2,2h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+      </g>
+    </svg>
+    <span>Logout</span>
+  </div>
+</a>
+
+<a href="#" style="text-decoration: none; margin-top :20px; font-size: 12px; margin-left:60px; color:#2e7d32;">? Help & Feedback</a>
+  </div>
+
+  <div class="main-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;">
+  <!-- Title -->
+  <h1 style="font-family: 'Archivo', sans-serif; font-size: 32px;">Identify, explore <br>your observations of plants and trees</h1>
+
+  <!-- Action Bar (Right Side) -->
+  <div class="action-bar" style="display: flex; align-items: center; gap: 16px;">
+    <!-- Search -->
+    <div class="search-bar" style="display: flex; margin-top:20px; align-items: center; background-color: #f5f6f8; padding: 10px 16px; border-radius: 9999px; width: 300px; margin-bottom: 20px;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#111827" viewBox="0 0 24 24" style="margin-right: 8px;">
+    <path d="M10 2a8 8 0 105.29 14.29l5.7 5.7 1.41-1.42-5.7-5.7A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+  </svg>
+  <input id="searchInput" type="text" placeholder="Search Categories..." style="border: none; background: transparent; outline: none; font-size: 16px; color: #6b7280; flex: 1;">
+</div>
+
+    <!-- Filter Icon -->
+    <div style="width: 48px; height: 48px; background-color: #f5f6f8; border-radius: 9999px; display: flex; align-items: center; justify-content: center;">
+<svg xmlns="http://www.w3.org/2000/svg" style="margin-top:5px;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="gray" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 4h18" />
+  <path d="M5 8h14" />
+  <path d="M7 12h10" />
+  <path d="M11 16h2" />
+</svg>
+    </div>
+
+    <!-- Record Button -->
+    <button id="startScanBtn" style="background-color: #2e7d32; color: white; border: none; padding: 10px 16px; border-radius: 9999px; font-size: 16px; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line-icon lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+      <path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+      <span style="font-family: 'Archivo', sans-serif; font-size: 14px;">Scan QR</span>
+    </button>
+    
+  </div>
+</div>
+
+
+<div class="mobile-flex-container" style="background-color: #ffffff; padding: 20px; display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; font-family: sans-serif;">
+
+  <!-- Latest observed species -->
+  <div style="text-align: center;" class="latest">
+    <h3>Latest observed species</h3>
+    <div style="width: 300px; height:200px; border-radius: 8px; overflow: hidden; position: relative;">
+      <img src="https://tse1.mm.bing.net/th/id/OIP.xMRCW2P8xLNmeofGPmHKNgHaFi?rs=1&pid=ImgDetMain&o=7&rm=3" style="width: 100%; display: block;">
+      <p style="font-style: italic; color: white; text-align: left; position: absolute; bottom: 10px; left: 10px; margin: 0;">Lilium martagon L.</p>
+    </div>
+    <div style="margin-top: 10px;">
+      <span style="height: 10px; width: 10px; background-color: #88a94e; border-radius: 50%; display: inline-block;"></span>
+      <span style="height: 10px; width: 10px; background-color: #d8e4b5; border-radius: 50%; display: inline-block;"></span>
+      <span style="height: 10px; width: 10px; background-color: #d8e4b5; border-radius: 50%; display: inline-block;"></span>
+      <span style="height: 10px; width: 10px; background-color: #d8e4b5; border-radius: 50%; display: inline-block;"></span>
+    </div>
+  </div>
+
+  <!-- Upload center section -->
+<form id="uploadForm" action="/identify" method="POST" enctype="multipart/form-data" class="upload">
+<input type="hidden" name="volunteerName" id="volunteerName" />
+  <div id="uploadDiv"
+       style="text-align: center; background-color: #ffffff; border: 2px dashed #B5D96D; border-radius: 12px; padding: 40px 60px; margin: 45px 20px 0 20px; height: 150px; width: 300px; cursor: pointer;">
+    <h3 style="margin-top: 0;"><span style="font-size: 24px;">🌿</span> Start Exploring Now!</h3>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#4E7D00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image-plus-icon">
+      <path d="M16 5h6"/>
+      <path d="M19 2v6"/>
+      <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"/>
+      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+      <circle cx="9" cy="9" r="2"/>
+    </svg>
+    <p style="margin-top: 10px; color: #4E7D00;">add / drop an image</p>
+
+    <!-- Hidden file input with correct name -->
+    <input type="file" name="image" id="fileInput" accept="image/*" style="display: none;" />
+  </div>
+</form>
+
+
+  <!-- Latest contributions -->
+  <div style="text-align: center;" class="contributor">
+    <h3>Latest contributions</h3>
+    <div style="width: 300px; height:200px; border-radius: 8px; overflow: hidden; position: relative;">
+      <img src="https://bs.plantnet.org/image/o/ef7f22ac5268bb507d628c1337dc5804982e84f2" style="width: 100%; display: block;">
+      <p style="font-style: italic; color: white; text-align: left; position: absolute; bottom: 10px; left: 10px; margin: 0;">Baptisia australis (L.) R.Br.</p>
+    </div>
+    <div style="margin-top: 10px;">
+      <span style="height: 10px; width: 10px; background-color: #88a94e; border-radius: 50%; display: inline-block;"></span>
+      <span style="height: 10px; width: 10px; background-color: #d8e4b5; border-radius: 50%; display: inline-block;"></span>
+      <span style="height: 10px; width: 10px; background-color: #d8e4b5; border-radius: 50%; display: inline-block;"></span>
+      <span style="height: 10px; width: 10px; background-color: #d8e4b5; border-radius: 50%; display: inline-block;"></span>
+    </div>
+  </div>
+</div>
+
+
+<div id="scannerContainer">
+  <div id="qr-reader"></div>
+  <div class="scanner-border"></div>
+  <button id="closeScan">Close Scanner</button>
+</div>
+
+  <div class="report-header">
+  <div class="report-title">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notepad-text-icon lucide-notepad-text"><path d="M8 2v4"/><path d="M12 2v4"/><path d="M16 2v4"/>
+      <rect width="16" height="18" x="4" y="4" rx="2"/><path d="M8 10h6"/><path d="M8 14h8"/><path d="M8 18h5"/></svg> <h2 style="margin-left:10px;">Detailed categories</h2>
+  </div>
+</div>
+
+<div class="kanban-container">
+    <!-- Column 1 -->
+    <div class="kanban-column" data-category="Medicinal Trees" style="padding:0;">
+      <div class="card-stack" id="medicinal-card-stack" >
+        <!--display here-->
+      </div>     
+      <div style="display: flex; gap: 16px; align-items: center; padding:10px;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      20
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      1
+    </span>
+  </div>
+  <div style="margin-top:6px;"></div>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="kanban-column" data-category="Fruit-Bearing Trees">
+  <h2>Fruit-Bearing Trees</h2>
+  <div class="card-stack">
+      <p class="task-title" style="margin-bottom: -3px; font-weight: 500; margin-top:0px;">
+        Nurturing nature's sweetness — from blossom to bounty.
+      </p>
+
+      <div style="margin-bottom: 2px;">
+        <span class="tag pink" style="background-color: #ffeef2; color: #ec4899; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-right: 6px;">
+          Endangered
+        </span>
+        <span style="background-color: #e0f2ff; color: #3b82f6; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+          Rare
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      11
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      2
+    </span>
+  </div>
+    </div>
+  </div>
+
+
+    <!-- Column 3 -->
+    <div class="kanban-column" data-category="Timber Trees">
+  <h2>Timber Trees</h2>
+  <p style="margin-bottom: 20px; font-weight: 500; margin-top:0px;">
+    Valuable for strong, durable timber used in furniture and construction.
+  </p>
+
+  <div style="margin-bottom: 20px; margin-top:-2px;">
+    <span style="
+      background-color: #e6f4ea;
+      color: #22c55e;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-block;">
+      Non-native
+    </span>
+  </div>
+
+  <div style="display: flex; gap: 16px; align-items: center;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      15
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      7
+    </span>
+  </div>
+</div>
+
+
+    <!-- Column 4 -->
+    <div class="kanban-column" data-category="Ornamental Trees" style="padding:0;">
+      <div class="card-stack" id="Ornamental-card-stack" >
+        <!--display here-->
+      </div>     
+      <div style="display: flex; gap: 16px; align-items: center; padding:10px;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      7
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      14
+    </span>
+  </div>
+  <div style="margin-top:10px;"></div>
+    </div>
+
+    <!-- Column 5 -->
+    <div class="kanban-column" data-category="Shade-Trees">
+  <h2>Shade Trees</h2>
+  <div class="card-stack">
+      <p class="task-title" style="margin-bottom: -3px; font-weight: 500; margin-top:0px;">
+        Providing comfort and calm — nature’s own shelter from the sun.
+      </p>
+
+      <div style="margin-bottom: 2px;">
+        <span class="tag pink" style="background-color: #fff7e6; color: #a07924; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-right: 6px;">
+          Endangered
+        </span>
+        <span style="background-color: #e6f4ea; color: #22c55e; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+          Rare
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      2
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      9
+    </span>
+  </div>
+    </div>
+  </div>
+  
+  <!-- Column 6 -->
+    <div class="kanban-column" data-category="Sacred or Religious Trees" style="padding:0;">
+      <div class="card-stack" id="Sacred-card-stack" >
+        <!--display here-->
+      </div>     
+      <div style="display: flex; gap: 16px; align-items: center; padding:10px;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      3
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      4
+    </span>
+  </div>
+  <div style="margin-top:6px;"></div>
+    </div>
+
+    <!-- Column 7 -->
+    <div class="kanban-column" data-category="Evergreen Trees">
+  <h2>Evergreen Trees</h2>
+  <div class="card-stack">
+      <p class="task-title" style="margin-bottom: -3px; font-weight: 500; margin-top:0px;">
+        Ever present, ever green, guardians of life through every season.
+      </p>
+
+      <div style="margin-bottom: 2px;">
+        <span class="tag pink" style="background-color: #ffeef2; color: #ec4899; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-right: 6px;">
+          Endangered
+        </span>
+        <span style="background-color: #e6f4ea; color: #22c55e; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+          Rare
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      4
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      3
+    </span>
+  </div>
+    </div>
+  </div>
+
+  <!-- Column 8 -->
+    <div class="kanban-column" data-category="Deciduous Trees">
+  <h2>Deciduous Trees</h2>
+  <div class="card-stack">
+      <p class="task-title" style="margin-bottom: -3px; font-weight: 500; margin-top:0px;">
+        Gracefully shedding to renew — nature’s rhythm in every falling leaf.
+      </p>
+
+      <div style="margin-bottom: 2px;">
+        <span style="  background-color: #ededff; color: #2e7d32; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+          Native
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      5
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      7
+    </span>
+  </div>
+    </div>
+  </div>
+
+  <!-- Column 9 -->
+    <div class="kanban-column" data-category="Shade-Trees">
+  <h2>Religious Trees</h2>
+  <div class="card-stack">
+      <p class="task-title" style="margin-bottom: -3px; font-weight: 500; margin-top:0px;">
+        A sacred tree of peace and shade.
+      </p>
+
+      <div style="margin-bottom: 2px;">
+        <span class="tag pink" style="background-color: #fff7e6; color: #a07924; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-right: 6px;">
+          Endangered
+        </span>
+        <span style="background-color: #e6f4ea; color: #22c55e; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+          Rare
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      4
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      7
+    </span>
+  </div>
+    </div>
+  </div>
+
+  <!-- Column 10 -->
+  <div class="kanban-column" data-category="Endangered Trees">
+  <h2>Endangered Trees</h2>
+  <div class="card-stack">
+      <p class="task-title" style="margin-bottom: -3px; font-weight: 500; margin-top:0px;">
+        Rare roots. Vital futures.
+      </p>
+
+      <div style="margin-bottom: 2px;">
+        <span class="tag pink" style="background: #ffe5e5; color: #d30000; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-right: 6px;">
+          Endangered
+        </span>
+        <span style="background-color: #e6f4ea; color: #22c55e; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+          Non native
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      6
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      13
+    </span>
+  </div>
+    </div>
+  </div>
+
+  <!-- Column 11 -->
+    <div class="kanban-column" data-category="Rare Trees" style="padding:0;">
+      <div class="card-stack" id="Rare-card-stack" >
+        <!--display here-->
+      </div>     
+      <div style="display: flex; gap: 16px; align-items: center; padding:10px;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      4
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      1
+    </span>
+  </div>
+  <div style="margin-top:6px;"></div>
+    </div>
+
+    <!-- Column 12 -->
+    <div class="kanban-column" data-category="others Trees">
+  <h2>other Trees</h2>
+  <div class="card-stack">
+      <p class="task-title" style="margin-bottom: -3px; font-weight: 500; margin-top:0px;">
+        "Rooted in resilience, shaping ecosystems beyond every label.
+      </p>
+
+      <div style="margin-bottom: 2px;">
+        <span class="tag pink" style="background-color: #ffeef2; color: #ec4899; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; margin-right: 6px;">
+          Endangered
+        </span>
+        <span style="background-color: #e6f4ea; color: #22c55e; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+          Rare
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+        <path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+      </svg>
+      17
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; color: #555;">
+      <svg width="16" height="16" fill="red" viewBox="0 0 24 24">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      </svg>
+      5
+    </span>
+  </div>
+    </div>
+  </div>
+</div>
+
+<div id="search-results" style="margin-top: 20px;"></div>
+
+
+</div>
+</div>
+<div class="overlay" onclick="toggleSidebar()"></div>
+  <script>
+
+    //sidebar toggle
+    function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('active');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+
+ document.addEventListener("DOMContentLoaded", () => {
+  const header = document.querySelector('.mobile-header');
+  let lastScrollTop = 0;
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+
+    if (window.innerWidth <= 768) {
+      console.log("ScrollY:", currentScroll); // ✅ moved inside
+
+      if (currentScroll > 100 && currentScroll > lastScrollTop) {
+        header.classList.add('hide'); // hide on scroll down
+      } else {
+        header.classList.remove('hide'); // show on scroll up
+      }
+
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    }
+  });
+});
+
+
+    feather.replace();
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function (e) {
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  //identify image
+const uploadDiv = document.getElementById('uploadDiv');
+  const fileInput = document.getElementById('fileInput');
+  const form = document.getElementById('uploadForm');
+  const volunteerInput = document.getElementById('volunteerName');
+  const loggedInEmail = localStorage.getItem("loggedInEmail");
+
+  if (volunteerInput && loggedInEmail) {
+    volunteerInput.value = loggedInEmail;
+    console.log("Set volunteerName:", loggedInEmail);
+  }
+
+  // Handle Upload Click
+  if (uploadDiv && fileInput) {
+    uploadDiv.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        if (volunteerInput && loggedInEmail) {
+          volunteerInput.value = loggedInEmail; // ✅ Just before submit
+        }
+        form.submit(); // ✅ Safe to submit
+      }
+    });
+  }
+    
+      //list 
+document.querySelectorAll('.kanban-column').forEach(column => {
+    const category = column.getAttribute('data-category');
+    column.style.cursor = "pointer";
+
+    column.addEventListener('click', (e) => {
+      // Prevent clicks on buttons inside the column from triggering navigation
+      if (e.target.closest('button')) return;
+
+      window.location.href = `/list?category=${encodeURIComponent(category)}`;
+    });
+  });
+
+  </script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBHlppkQ0CGV3cxs3IT4ybrOC2p4QmZ8lo",
+    authDomain: "treeqrsystem.firebaseapp.com",
+    databaseURL: "https://treeqrsystem-default-rtdb.firebaseio.com",
+    projectId: "treeqrsystem",
+    storageBucket: "treeqrsystem.appspot.com",
+    messagingSenderId: "391723015713",
+    appId: "1:391723015713:web:2f85beae0f23fb89b44d60"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  db.ref("trees").once("value").then(snapshot => {
+    const trees = snapshot.val();
+    for (let key in trees) {
+      const tree = trees[key];
+
+      // Match category and published medicinal
+      if (tree.Published && tree.category === "Medicinal Trees") {
+        const imageURL = tree.images?.[0]?.url || "https://placehold.co/300x150?text=No+Image";
+
+        const nativeTag = `<span class="tags">
+    ${tree.native === "Yes" ? "Native" : "Non-Native"}
+  </span>`;
+
+  // Endangered tag (only if true)
+  const endangeredTag = tree.endangered === true
+    ? `<span class="tags" style="background: #ffe5e5; color: #d30000; padding: 2px 8px; border-radius: 12px; font-size: 12px;">
+        Endangered
+      </span>`
+    : "";
+
+        const cardHTML = `
+         <div class="kanban-card" style="margin: 0; padding: 0; border-radius: 4px; overflow: hidden; background: white;">
+  <img 
+    src="${imageURL}" 
+    alt="${tree.botanical || tree.Name}" 
+    style="display: block; width: 100%; height: 170px; object-fit: cover; margin: 0; padding: 0";>
+  <div style="padding: 8px;">
+    <p class="task-title" style=" font-size: 14px !important;
+      color: #6b7280 !important; maring-top:10px;" >${tree.botanical} - ${tree.Name}</p>
+      <div style=">
+    <p class="task-title" style=" font-size: 12px !important;
+      color: #6b7280 !important;margin-top:-10px;" >${tree.description.split('. ')[0]}.</p>
+    <div style="margin-top: 15px;">${nativeTag}${endangeredTag}</div>
+  </div>
+</div>
+
+        `;
+        document.getElementById("medicinal-card-stack").innerHTML = cardHTML;
+        break; // only show one
+      }
+      
+    }
+  }).catch(error => {
+    console.error("Error loading trees:", error);
+  });
+
+
+  db.ref("trees").once("value").then(snapshot => {
+    const trees = snapshot.val();
+    for (let key in trees) {
+      const tree = trees[key];
+
+
+
+      // Match category and published ornmenteal
+if (tree.Published && tree.category === "Ornamental Trees") {
+  const imageURL = tree.images?.[0]?.url || "https://placehold.co/300x150?text=No+Image";
+
+  const nativeTag = `<span class="tags" style="
+    background-color: #f3e8ff;
+    color: #a855f7;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-right: 8px;
+    display: inline-block;
+  ">${tree.native === "Yes" ? "Native" : "Non-Native"}</span>`;
+
+  const endangeredTag = tree.endangered === true
+    ? `<span class="tags" style="background: #ffe5e5; color: #d30000; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 500;">
+        Endangered
+      </span>`
+    : "";
+
+  const cardHTML = `
+    <div class="kanban-card" style="margin: 0; padding: 0; border-radius: 4px; overflow: hidden; background: white;">
+      <img 
+        src="${imageURL}" 
+        alt="${tree.botanical || tree.Name}" 
+        style="display: block; width: 100%; height: 170px; object-fit: cover; margin: 0;">
+      <div style="padding: 8px;">
+        <p class="task-title" style="margin: 0; font-size: 15px; color: #6b7280;">${tree.botanical} - ${tree.Name}</p>
+        <p class="task-title" style=" font-size: 14px !important;
+      color: #6b7280 !important;" >${tree.description.split('. ')[0]}.</p>
+        <div style="margin-top: 15px;">${nativeTag}${endangeredTag}</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("Ornamental-card-stack").innerHTML = cardHTML;
+  break; // Only the first matching tree
+}    
+    }
+  }).catch(error => {
+    console.error("Error loading trees:", error);
+  });
+
+
+  db.ref("trees").once("value").then(snapshot => {
+    const trees = snapshot.val();
+    for (let key in trees) {
+      const tree = trees[key];
+
+
+
+      // Match category and published Sacred 
+if (tree.Published && tree.category === "Sacred or Religious Trees") {
+  const imageURL = tree.images?.[0]?.url || "https://placehold.co/300x150?text=No+Image";
+
+  const nativeTag = `<span class="tags" style="
+    background-color: #f3e8ff;
+    color: #a855f7;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-right: 8px;
+    display: inline-block;
+  ">${tree.native === "Yes" ? "Native" : "Non-Native"}</span>`;
+
+  const endangeredTag = tree.endangered === true
+    ? `<span class="tags" style="background: #ffe5e5; color: #d30000; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 500;">
+        Endangered
+      </span>`
+    : "";
+
+  const cardHTML = `
+    <div class="kanban-card" style="margin: 0; padding: 0; border-radius: 4px; overflow: hidden; background: white;">
+      <img 
+        src="${imageURL}" 
+        alt="${tree.botanical || tree.Name}" 
+        style="display: block; width: 100%; height: 170px; object-fit: cover; margin: 0;">
+      <div style="padding: 8px;">
+        <p class="task-title" style="margin: 0; font-size: 15px; color: #6b7280;">${tree.botanical} - ${tree.Name}</p>
+        <p class="task-title" style=" font-size: 14px !important;
+      color: #6b7280 !important;" >${tree.description.split('. ')[0]}.</p>
+        <div style="margin-top: 15px;">${nativeTag}${endangeredTag}</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("Sacred-card-stack").innerHTML = cardHTML;
+  break;
+   // Only the first matching tree
+}    
+    }
+  }).catch(error => {
+    console.error("Error loading trees:", error);
+  });
+
+  db.ref("trees").once("value").then(snapshot => {
+    const trees = snapshot.val();
+    for (let key in trees) {
+      const tree = trees[key];
+
+
+
+      // Match category and published Rare
+if (tree.Published && tree.category === "Rare Trees") {
+  const imageURL = tree.images?.[0]?.url || "https://placehold.co/300x150?text=No+Image";
+
+  const nativeTag = `<span class="tags" style="
+    background-color: #f3e8ff;
+    color: #a855f7;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-right: 8px;
+    display: inline-block;
+  ">${tree.native === "Yes" ? "Native" : "Non-Native"}</span>`;
+
+  const endangeredTag = tree.endangered === true
+    ? `<span class="tags" style="background: #ffe5e5; color: #d30000; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 500;">
+        Endangered
+      </span>`
+    : "";
+
+  const cardHTML = `
+    <div class="kanban-card" style="margin: 0; padding: 0; border-radius: 4px; overflow: hidden; background: white;">
+      <img 
+        src="${imageURL}" 
+        alt="${tree.botanical || tree.Name}" 
+        style="display: block; width: 100%; height: 170px; object-fit: cover; margin: 0;">
+      <div style="padding: 8px;">
+        <p class="task-title" style="margin: 0; font-size: 15px; color: #6b7280;">${tree.botanical} - ${tree.Name}</p>
+        <p class="task-title" style=" font-size: 14px !important;
+      color: #6b7280 !important;" >${tree.description.split('. ')[0]}.</p>
+        <div style="margin-top: 15px;">${nativeTag}${endangeredTag}</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("Rare-card-stack").innerHTML = cardHTML;
+  break; // Only the first matching tree
+}    
+    }
+  }).catch(error => {
+    console.error("Error loading trees:", error);
+  });
+
+
+  //search
+const searchInput = document.getElementById('searchInput');
+const kanbanContainer = document.querySelector('.kanban-container');
+const kanbanColumns = Array.from(document.querySelectorAll('.kanban-column'));
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', async () => {
+  const query = searchInput.value.trim().toLowerCase();
+
+  if (query === '') {
+    // Reset search results and show all kanban columns
+    searchResults.innerHTML = '';
+    searchResults.style.display = 'none';
+
+    kanbanContainer.innerHTML = '';
+    kanbanColumns.forEach(col => {
+      col.style.display = 'block';
+      kanbanContainer.appendChild(col);
+    });
+    kanbanContainer.style.display = 'flex';
+    return;
+  }
+
+  searchResults.innerHTML = '';
+  searchResults.style.display = 'block';
+
+  // Kanban category filtering
+  const matched = [], unmatched = [];
+  kanbanColumns.forEach(column => {
+    const category = column.getAttribute('data-category').toLowerCase();
+    if (category.includes(query)) {
+      column.style.display = 'block';
+      matched.push(column);
+    } else {
+      column.style.display = 'none';
+      unmatched.push(column);
+    }
+  });
+
+  kanbanContainer.innerHTML = '';
+  [...matched, ...unmatched].forEach(col => kanbanContainer.appendChild(col));
+
+  // Firebase tree data search
+  const snapshot = await db.ref('trees').once('value');
+  const data = snapshot.val();
+  let found = false;
+
+  for (const key in data) {
+    const tree = data[key];
+    const name = (tree.Name || '').toLowerCase();
+    const id = (tree.ID || '').toLowerCase();
+
+    if ((name.includes(query) || id.includes(query)) && tree.Published) {
+      found = true;
+
+      const div = document.createElement('div');
+      div.style.border = '1px solid #ccc';
+      div.style.padding = '12px';
+      div.style.marginBottom = '12px';
+      div.style.borderRadius = '8px';
+      div.style.background = '#f9f9f9';
+
+      const img = tree.images?.[0]?.url
+        ? `<img src="${tree.images[0].url}" alt="Tree Image" style="max-width: 100%; height: auto; margin-bottom: 10px;" />`
+        : '';
+
+      div.className = 'event-card';
+div.innerHTML = `
+  <div class="event-image">
+    ${tree.images?.[0]?.url ? `<img src="${tree.images[0].url}" alt="${tree.Name}">` : ''}
+  </div>
+  <div class="event-content">
+    <span class="discount-tag">Detail</span>
+    <h3 class="event-title">${tree.Name} - ${tree.botanical || tree.classification?.species || 'N/A'}</h3>
+    <p class="event-details">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days-icon lucide-calendar-days">
+          <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>
+          <path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/>
+          <path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
+        </svg><span style="color:#2e7d32; margin-left: 2px;">
+        <strong class="formatted-date" data-ts="${tree.Timestamp}"></strong>
+      </span><br>
+
+     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin-icon lucide-map-pin">
+          <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>${tree.location?.site || ''}, ${tree.location?.city || ''}
+    </p>
+    <p class="event-description">${tree.description?.substring(0, 200) || 'No description available.'}</p>
+  </div>
+`;
+
+      searchResults.appendChild(div);
+
+      document.querySelectorAll('.formatted-date').forEach(span => {
+  const ts = span.getAttribute('data-ts');
+  if (ts) {
+    const date = new Date(ts);
+    const formatted = date.toLocaleDateString('en-IN', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+    span.textContent = formatted;
+  }
+});
+
+    }
+  }
+
+  kanbanContainer.style.display = found ? 'none' : 'flex';
+});
+
+
+//camera 
+const startScanBtn = document.getElementById('startScanBtn');
+  const scannerContainer = document.getElementById('scannerContainer');
+  const closeScan = document.getElementById('closeScan');
+  let html5QrCode;
+
+  startScanBtn.addEventListener('click', () => {
+    scannerContainer.style.display = 'flex';
+
+    html5QrCode = new Html5Qrcode("qr-reader");
+    html5QrCode.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 250 }
+      },
+      (decodedText) => {
+  html5QrCode.stop().then(() => {
+    onScanSuccess(decodedText.trim());
+  });
+},
+
+      (errorMsg) => {
+        // Optional: console.log("No QR code match", errorMsg);
+      }
+    );
+  });
+
+  closeScan.addEventListener('click', () => {
+    if (html5QrCode) {
+      html5QrCode.stop().then(() => {
+        html5QrCode.clear();
+        scannerContainer.style.display = 'none';
+      });
+    }
+  });
+
+  function onScanSuccess(decodedText) {
+  console.log("Scanned text:", decodedText);
+
+  // Extract ID from full URL (e.g., "https://.../gulmohar-tree-1972")
+  const parts = decodedText.split('/');
+  const treeId = parts[parts.length - 1];  
+
+  if (treeId) {
+    window.location.href = `/data_entry?id=${treeId}`;
+  } else {
+    alert('Invalid QR code');
+  }
+}
+
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('success') === '1') {
+    alert('Successfully saved!');
+  }
+
+
+  //voluenterr name
+  document.addEventListener("DOMContentLoaded", () => {
+    const email = localStorage.getItem("loggedInEmail");
+
+    const userSpan = document.getElementById("userEmail");
+    if (email && userSpan) {
+      userSpan.textContent = email;
+    } else if (userSpan) {
+      userSpan.textContent = "Not logged in";
+    }
+
+    const libraryLink = document.getElementById("libraryLink");
+    if (email && libraryLink) {
+      libraryLink.href = `/library?email=${encodeURIComponent(email)}`;
+    }
+
+    if (email) {
+      fetch(`/api/treecount?email=${encodeURIComponent(email)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          const countSpan = document.getElementById("published-count");
+          if (countSpan) {
+            countSpan.textContent = `${data.count} Published`;
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching tree count:", error);
+          const countSpan = document.getElementById("published-count");
+          if (countSpan) {
+            countSpan.textContent = "Error loading count";
+          }
+        });
+    }
+  });
+
+</script>
+
+
+</body>
+</html>

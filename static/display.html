@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Green Circle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 10px 30px;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+
+    header img {
+      height: 28px;
+      margin-right: 10px;
+    }
+
+    header h1 {
+      font-size: 18px;
+      color: #444;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      text-align: center;
+      padding: 40px 30px;
+      border-radius: 12px;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .card img {
+      max-width: 200px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 30px;
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    .card p {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .card button {
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .card button:hover {
+      background: #5e60ce;
+    }
+
+    .alert {
+      text-align: center;
+      padding: 15px 20px;
+      background: #f5f5ff;
+      font-size: 14px;
+      color: #2e7d32;
+    }
+
+     .top {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="text"],
+    select {
+      width: 150px;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #BDBDBD;
+      border-radius: 6px;
+      background-color: #fff;
+    }
+
+    a {
+  all: unset; /* resets all inherited and applied styles */
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  header h1 {
+    font-size: 16px;
+  }
+
+  .alert {
+    font-size: 13px;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .card {
+    padding: 20px 16px;
+  }
+
+  .card h2 {
+    font-size: 22px;
+  }
+
+  .card button {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .card img, .card svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+    .logo img
+  {
+    margin-right:-5px !important;
+  }
+
+  a button {
+    margin-left: 0 !important;
+    margin-top: 10px;
+    align-self: flex-start;
+  }
+
+  main {
+    padding: 20px 10px;
+  }
+
+  .qr-section {
+    padding: 0 10px;
+  }
+
+  .qr-section img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .qr-section p {
+    font-size: 14px;
+  }
+
+  .top {
+    gap: 10px;
+  }
+
+        .back {
+      margin-left: 300px !important; /* or use auto for center */
+      background-color: transparent !important;
+      color:#9ca3af !important;
+      margin-top: -40px !important;
+    }
+
+        .alert {
+display:none;
+    }
+}
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="top">
+    <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+        <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+          Green Circle 
+        </span>
+      </div>
+      </div>
+      <a href="/generate">
+    <button class="back" style="background-color: #2e7d32; color: white; border: none; padding: 10px 16px; border-radius: 9999px; font-size: 16px; display: flex; align-items: center; gap: 8px; cursor: pointer; margin-left:1180px;">
+      Back
+    </button>
+    </a>
+  </header>
+
+    <div class="alert"><b>Notice:</b> This is a Beta Version
+We're still polishing things—some features may not work perfectly. Your feedback is valuable in helping us improve!
+  </div>
+
+    <div class="qr-section" style="text-align: center; margin-top: 20px;">
+    <img src="/qr?id={{.ID}}" alt="Tree QR Code" width="400" height="400">
+    <p><strong>UID:</strong> {{.ID}}</p>
+    <p><strong>Name:</strong> {{.Name}}</p>
+    <p><strong>Generated On:</strong> <span id="genTime">{{.Timestamp}}</span></p>
+
+
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+    <a href="/download-pdf?id={{.ID}}&name={{.Name}}" style="text-decoration: none;">
+        <button style="background-color: #2e7d32; color: white; border: none; padding: 10px 16px; border-radius: 10px; font-size: 16px; cursor: pointer;">
+            Download QR as PDF
+        </button>
+    </a>
+</div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const rawTime = document.getElementById("genTime").innerText;
+
+    // Parse and format
+    const dateObj = new Date(rawTime);
+    const options = {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    };
+
+    const formatted = dateObj.toLocaleString('en-IN', options);
+    document.getElementById("genTime").innerText = formatted;
+  });
+</script>
+
+
+
+</body>
+</html>

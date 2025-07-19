@@ -1,0 +1,7 @@
+using openrouter api key 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,
+using firebase reatime db(.json and database url of db),
+using own server for coquie TTS using python
+geo tagging user hosted using render.com
+geo tagging hosted using render.com
+tts-audio-server hosted using Deta Space
+

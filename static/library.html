@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Green Circle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    html,body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      height:100%;
+    }
+
+    .container {
+      display: flex;
+  height: 100vh; /* Full viewport height */
+    }
+
+    .sidebar {
+      width: 280px;
+      background-color: #FAFAFA;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid #eee;
+      height:100%;
+    }
+
+    .top {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .workspace {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .workspace img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .workspace-info {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      flex: 1;
+    }
+
+    .workspace-info span:first-child {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .workspace-info span:last-child {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    nav {
+      padding-left: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #4b5563;
+      position: relative;
+      text-decoration: none;
+      padding: 8px 0;
+      margin-bottom: 15px;
+    }
+
+    .nav-item.active {
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      height: 100%;
+      width: 4px;
+      background-color:#2e7d32;
+      border-radius: 1px;
+    }
+
+    .nav-item.logout {
+      color: #ef4444;
+      font-weight: 500;
+    }
+
+    .notification-badge {
+      background-color: #ef4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 999px;
+      position: absolute;
+      right: 0;
+      
+    }
+
+    .logout-button {
+  margin-top: auto; /* Push to bottom if using flex layout */
+  background-color: #efefef;
+  color: #6B7280;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #ffcccc;
+}
+
+.logout-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+  .menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* space between icon and text */
+}
+
+
+.menu-item svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.menu-item span {
+  font-size: 16px;
+  font-weight: 500;
+   }
+
+    .main-content {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 20px;
+      height: 90%;
+      overflow-y: auto; /* Optional: scroll if content overflows */
+    }
+
+.empty {
+  display: flex;
+  flex-direction: column;      /* Stack items vertically */
+  justify-content: center;     /* Vertical centering */
+  align-items: center;         /* Horizontal centering */
+  padding: 1rem;
+  text-align: center;
+}
+
+.empty img {
+  max-width: 350px;
+  height: 350px;
+}
+
+.tab-container {
+    display: flex;
+  width: max-content;     /* Fit width to content */
+  height: auto;           /* Let height be based on children */
+  width: 100%;
+  align-items: stretch;   /* Stretch tabs to same height */
+  border-bottom:1px solid rgba(229, 231, 235, 0.5);
+}
+
+.tab {
+  padding: 10px 30px;
+  border-radius: 12px 12px 0 0;
+  cursor: pointer;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.tab.active {
+  background-color: #f2f2ff; /* light lavender */
+  color: #2e7d32;            /* vibrant blue */
+  font-weight: bold;
+}
+
+.event-card {
+  display: flex;
+  border: 1px solid #efeeee;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 20px 0 20px 5px;
+  font-family: 'Inter', sans-serif;
+  max-width: 1200px;
+  height: 120px; /* Fixed height */
+}
+
+.event-image {
+  flex: 0 0 160px;
+  height: 100%;
+  background-color: #f1f2f6;
+}
+
+.event-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-content {
+  flex: 1;
+  padding: 12px 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.discount-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #2e7d32;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.price-text {
+  color: #6c5ce7;
+  margin: 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.event-title {
+  margin: 4px 0 8px;
+  font-size: 16px;
+}
+
+.event-description,
+.event-details {
+  font-size: 13px;
+  color: #2d3436;
+  line-height: 1.4;
+  white-space: normal;           /* allow wrapping */
+  word-wrap: break-word;
+  overflow: visible;
+  text-overflow: unset;          /* no ellipsis */
+}
+
+.event-details {
+  margin-bottom: 4px; /* Reduce bottom spacing */
+}
+
+.event-description {
+  margin-top: 0; /* Remove top spacing */
+}
+
+.event-content > * {
+  margin: 6px 0;
+}
+
+.event-title {
+  font-family:'Archivo' sans-serif;
+  font-size: 16px;
+  margin: 6px 0; /* override if needed */
+}
+
+.event-details {
+  font-size: 13px;
+  color: #636e72;
+  line-height: 1.4;
+  margin: 6px 0;
+}
+
+.event-description {
+  font-size: 13px;
+  color: #2d3436;
+  margin: 6px 0;
+}
+
+#scannerContainer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 20, 40, 0.95); /* dark overlay */
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  backdrop-filter: blur(5px); /* smooth background blur */
+}
+
+#qr-reader {
+  width: 300px;
+  height: 300px;
+  border: 3px solid #2e7d32;
+  border-radius: 18px;
+  box-shadow: 0 0 25px #8b5cf6;
+  background-color: #000;
+  position: relative;
+}
+
+#closeScan {
+  margin-top: 20px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#closeScan:hover {
+  background-color: #dc2626;
+}
+
+.hamburger {
+  display: none; /* Default: hidden on larger screens */
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 16px;
+  position: absolute;
+  top: 0px;
+  left: 340px;
+  z-index: 1001;
+}
+
+.mobile-header {
+  display: none;
+}
+
+/* Optional fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+#qr-reader {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+#pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+}
+
+#pagination button {
+  padding: 6px 12px;
+  margin: 0 3px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+#pagination button.active {
+  background-color: #4F46E5;
+  color: white;
+  font-weight: bold;
+}
+
+#pagination button:hover {
+  background-color: #d1d5db;
+}
+
+#pagination span {
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+a {
+  all: unset; /* resets all inherited and applied styles */
+}
+
+/* Visible and animated only on mobile */
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FAFAFA;
+    padding: 12px 16px;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
+    transition: top 0.3s ease-in-out;
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+
+  .mobile-header.hide {
+    top: -80px; /* animate out */
+  }
+  
+  .mobile-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .hamburger {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background-color: #FAFAFA;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 999;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+
+  .action-bar {
+    display: none !important;
+  }
+
+  .scan{
+    position:absolute;
+    left:300px;
+    color:#9ca3af;
+  }
+
+.mobile-flex-container {
+    flex-direction: column;
+  }
+
+  .me{
+    display: none !important;
+  }
+
+  .left-content{
+    display:none !important;
+  }
+
+    .tab {
+    flex: 1 1 100% !important;           /* Full width on small screens */
+    padding: 12px !important;
+    font-size: 15px !important;
+  }
+
+  .event-card {
+    flex-direction: row; /* keep image left, content right */
+    flex-wrap: nowrap;
+  }
+
+  .event-image {
+    width: 40% !important; /* adjust as needed */
+    max-width: 35%;
+  }
+
+  .event-content {
+    width: 60% !important;
+    padding: 12px;
+  }
+
+  .event-title {
+    font-size: 16px;
+  }
+
+  .event-description{
+    display: none !important;
+  }
+
+  .event-details {
+    font-size: 12px;
+  }
+
+  .discount-tag {
+    display: none !important;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <header class="mobile-header">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="logo">
+    <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+    <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+      Green Circle 
+    </span>
+  </div>
+  <p id="startScanBtn" class="scan">Scan</p>
+</header>
+
+<div class="container">
+  <div class="sidebar">
+    <div class="top">
+      <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 40px; width: 40px;" />
+        <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32;">
+          Green Circle 
+        </span>
+      </div>
+
+  <div class="workspace" style="border: 1px solid rgba(229, 231, 235, 0.5);">
+  <img src="https://ui-avatars.com/api/?name=GC&background=00a884&color=fff" alt="Sample Image" />
+  <div class="workspace-info">
+    <span id="userEmail" style="font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 5px; font-size:14px;"></span>
+        <div class="volunteer-block">
+  <span id="published-count" style="font-family: 'Inter', sans-serif; font-size: 12px;">Loading...</span>
+</div>
+  </div>
+  <i data-feather="chevron-down" style="color: #9ca3af;" width="16" height="16"></i>
+</div>
+
+<nav>
+        <a href="/home" class="nav-item">
+        <div class="menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+            <title>home</title>
+            <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+            <polyline data-cap="butt" data-color="color-2" points="1 11 12 2 23 11" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <polyline data-cap="butt" points="10 23 10 17 14 17 14 23" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"/>
+            <path d="M4,13v8c0,1.105,.895,2,2,2h12c1.105,0,2-.895,2-2V13" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+          </g>
+        </svg>
+        <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Home</span>
+    </div>
+    </a>
+        <a href="/library" class="nav-item active">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>app store</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <rect x="2" y="2" width="8" height="8" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect data-color="color-2" x="14.464" y="2.464" width="7.071" height="7.071" transform="translate(1.03 14.485) rotate(-45)" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="14" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <rect x="2" y="14" width="8" height="8" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: Arial, sans-serif;font-size: 14px;">My Library</span>
+  </div>
+</a>
+
+        <a href="/generate" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line-icon lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Generate Qr code</span>
+  </div>
+</a>
+
+        <a href="#" class="nav-item">
+        <div class="menu-item">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+          <title>alarm</title><g stroke-linejoin="miter" fill="currentcolor" stroke-linecap="butt" class="nc-icon-wrapper">
+            <path d="M19,13V8A7,7,0,0,0,5,8v5a13.834,13.834,0,0,1-2,7H21A13.834,13.834,0,0,1,19,13Z" fill="none" stroke="currentcolor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/> 
+            <path data-color="color-2" data-stroke="none" d="M9.174,22a3,3,0,0,0,5.652,0Z" fill="currnetcolor" stroke="none"/></g>
+          </svg>
+              <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Notification</span>
+              <span class="notification-badge">9</span>
+          </div>
+          </a>
+
+        <a href="#" class="nav-item">
+  <div class="menu-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>cogwheel</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper">
+        <path d="M23,13.5v-3l-3.248-.443a7.927,7.927,0,0,0-.9-2.165l1.984-2.61L18.718,3.161l-2.61,1.984a7.927,7.927,0,0,0-2.165-.9L13.5,1h-3l-.443,3.248a7.927,7.927,0,0,0-2.165.9L5.282,3.161,3.161,5.282l1.984,2.61a7.927,7.927,0,0,0-.9,2.165L1,10.5v3l3.248.443a7.927,7.927,0,0,0,.9,2.165l-1.984,2.61,2.121,2.121,2.61-1.984a7.927,7.927,0,0,0,2.165.9L10.5,23h3l.443-3.248a7.927,7.927,0,0,0,2.165-.9l2.61,1.984,2.121-2.121-1.984-2.61a7.927,7.927,0,0,0,.9-2.165Z" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+        <circle data-color="color-2" cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+    </svg>
+    <span style="font-family: 'Inter', sans-serif; font-size: 14px;">Settings</span>
+  </div>
+  </a>
+      </nav>
+    </div>
+
+    <a href="/" class="logout-button">
+  <div class="logout-item">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+      <title>logout</title>
+      <g stroke-linejoin="miter" fill="currentColor" stroke-linecap="butt" class="nc-icon-wrapper" stroke="currentColor">
+        <path d="M16,17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M21,12H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+        <path d="M12,2H5C3.895,2,3,2.895,3,4v16c0,1.105,0.895,2,2,2h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10"/>
+      </g>
+    </svg>
+    <span>Logout</span>
+  </div>
+</a>
+
+<a href="#" style="text-decoration: none; margin-top :20px; font-size: 12px; margin-left:60px; color:#2e7d32;">? Help & Feedback</a>
+  </div>
+
+  <div class="main-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;">
+  <!-- Title -->
+  <h1 style="font-family: 'Archivo', sans-serif; font-size: 32px;">Library</h1>
+
+  <!-- Action Bar (Right Side) -->
+  <div class="action-bar" style="display: flex; align-items: center; gap: 16px;">
+    <!-- Search -->
+    <div class="search-bar" style="display: flex; align-items: center; background-color: #f5f6f8; padding: 10px 16px; border-radius: 9999px; width: 300px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#111827" viewBox="0 0 24 24">
+        <path d="M10 2a8 8 0 105.29 14.29l5.7 5.7 1.41-1.42-5.7-5.7A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+        </svg>
+      <span style="margin-right: 8px; color: #6b7280;"></span>
+      <input type="text" placeholder="Search Tree..." style="border: none; background: transparent; outline: none; font-size: 16px; color: #6b7280; flex: 1;">
+    </div>
+
+    <!-- Filter Icon -->
+<!-- Icon Button -->
+<div style="position: relative;">
+  <div id="filterToggle"
+    style="width: 48px; height: 48px; background-color: #f5f6f8; border-radius: 9999px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="gray"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 4h18" />
+      <path d="M5 8h14" />
+      <path d="M7 12h10" />
+      <path d="M11 16h2" />
+    </svg>
+  </div>
+
+  <!-- Dropdown Menu -->
+ <div id="sortDropdown"
+  style="position: absolute; top: 55px; right: 0; background-color: white; border: 1px solid #ccc; border-radius: 6px; 
+         display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 1000; width: 180px;">
+<div style="padding: 8px 12px; cursor: pointer;" onclick="sortCards('latest')">Latest Created</div>
+    <div style="padding: 8px 12px; cursor: pointer;" onclick="sortCards('earliest')">Earliest Created</div>
+  </div>
+</div>
+
+    <!-- Record Button -->
+    <button id="startScanBtn" style="background-color: #2e7d32; color: white; border: none; padding: 10px 16px; border-radius: 9999px; font-size: 16px; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line-icon lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+      <path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
+      <span style="font-family: 'Archivo', sans-serif; font-size: 14px;">Scan QR</span>
+    </button>
+  </div>
+</div>
+
+<div id="scannerContainer">
+  <div id="qr-reader"></div>
+  <div class="scanner-border"></div>
+  <button id="closeScan">Close Scanner</button>
+</div>
+
+    <div class="tab-container">
+    <a id="libraryLink"><div class="tab active">Published</div></a>
+    <a id="draftLink" href="#"><div class="tab">Drafts</div></a>
+    <a id="qrLink"><div class="tab">QR Codes</div></a>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: 'Inter', sans-serif; color: #6b7280; margin-top: 20px;">
+  
+  <!-- Left Button -->
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <div class="me" style="display: flex; align-items: center; background-color: #f5f6f8; padding: 10px 30px; border-radius: 9999px; font-size: 14px; font-weight: 500; cursor: pointer;">
+      Recorded by me
+      <svg xmlns="http://www.w3.org/2000/svg" style="margin-left: 6px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </div>
+
+    <!-- Total Entries (now outside the pill) -->
+    <div id="total-count" style="font-size: 14px;">Total 0 Published</div>
+
+  </div>
+
+  <!-- Right Icons -->
+  <div class="left-content" style="display: flex; gap: 10px;">
+    <div style="width: 43px; height: 43px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="4" cy="6" r="1.5"/>
+        <line x1="8" y1="6" x2="20" y2="6"/>
+        <circle cx="4" cy="12" r="1.5"/>
+        <line x1="8" y1="12" x2="20" y2="12" />
+        <circle cx="4" cy="18" r="1.5"/>
+        <line x1="8" y1="18" x2="20" y2="18"/>
+      </svg>
+    </div>
+
+    <div style="width: 43px; height: 43px; border-radius: 30px; display: flex; background-color: #f2f2ff;; align-items: center; justify-content: center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="7" height="18" x="3" y="3" rx="1"/>
+        <rect width="7" height="7" x="14" y="3" rx="1"/>
+        <rect width="7" height="7" x="14" y="14" rx="1"/>
+      </svg>
+    </div>
+    <div style="display: flex; align-items: center; background-color: #f5f6f8; padding: 10px 15px; border-radius: 9999px; font-size: 14px; font-weight: 500; cursor: pointer;">
+      Sort by: Date
+      <svg xmlns="http://www.w3.org/2000/svg" style="margin-left: 6px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </div>
+  </div>
+</div>
+<div id="cards-container">
+  {{range .}}
+  <div class="event-card" data-ts="{{.Timestamp}}" data-id="{{.ID}}" onclick="viewEvent(this)">
+    <!-- Left Image -->
+    <div class="event-image">
+      {{if .Images}}
+        <img src="{{(index .Images 0).URL}}" alt="{{.Name}}">
+      {{end}}
+    </div>
+
+    <!-- Right Content -->
+    <div class="event-content">
+      <span class="discount-tag">Detail</span>
+      <h3 class="event-title">{{.Name}} - {{.Botanical}}</h3>
+      <p class="event-details">
+        <!-- Calendar Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days-icon lucide-calendar-days">
+          <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>
+          <path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/>
+          <path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
+        </svg>
+        <span style="color:#2e7d32; margin-left: 2px;">
+          <strong class="formatted-date" data-ts="{{.Timestamp}}"></strong>
+        </span><br>
+
+        <!-- Map Pin Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin-icon lucide-map-pin">
+          <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        {{.Location.Site}}
+      </p>
+      <p class="event-description">{{.Description}}</p>
+    </div>
+  </div>
+{{else}}
+  <div class="empty" style="position: relative; top: 0px;">
+           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="400" viewBox="0 0 780.99866 659.07566" role="img" artist="Katerina Limpitsouni" source="https://undraw.co/"><path d="M989.58289,211.98157H358.15711a.91644.91644,0,1,1,0-1.83287H989.58289a.91644.91644,0,1,1,0,1.83287Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/><circle cx="169.28352" cy="68.60845" r="10.08082" fill="#3f3d56"/><circle cx="204.10816" cy="68.60845" r="10.08082" fill="#3f3d56"/><circle cx="238.9328" cy="68.60845" r="10.08082" fill="#3f3d56"/><path d="M968.71769,185.15592H943.97387a1.83288,1.83288,0,0,1,0-3.66576h24.74382a1.83288,1.83288,0,1,1,0,3.66576Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/><path d="M968.71769,192.0292H943.97387a1.83288,1.83288,0,1,1,0-3.66575h24.74382a1.83288,1.83288,0,1,1,0,3.66575Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/><path d="M968.71769,198.90249H943.97387a1.83288,1.83288,0,0,1,0-3.66576h24.74382a1.83288,1.83288,0,1,1,0,3.66576Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/><path d="M545.01942,492.48315a1.29539,1.29539,0,0,0-1.294,1.294V662.92758a1.29524,1.29524,0,0,0,1.294,1.294H780.67383a1.29525,1.29525,0,0,0,1.294-1.294V493.77713a1.29541,1.29541,0,0,0-1.294-1.294Z" transform="translate(-209.50067 -120.46217)" fill="#e4e4e4"/><path d="M767.66626,506.447V626.64892a3.03267,3.03267,0,0,1-3.0284,3.02867H560.578c-.14789,0-.29505-.01479-.44293-.02958a3.036,3.036,0,0,1-2.58547-2.99909V506.447a3.03267,3.03267,0,0,1,3.0284-3.02866H764.63786A3.0232,3.0232,0,0,1,767.66626,506.447Z" transform="translate(-209.50067 -120.46217)" fill="#fff"/><path d="M545.51214,285.48315a1.29539,1.29539,0,0,0-1.294,1.294V455.92758a1.29523,1.29523,0,0,0,1.294,1.294H781.16655a1.29525,1.29525,0,0,0,1.294-1.294V286.77713a1.29541,1.29541,0,0,0-1.294-1.294Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/><path d="M768.159,299.447V419.64892a3.03267,3.03267,0,0,1-3.0284,3.02867H561.07075c-.14788,0-.295-.01479-.44293-.02958a3.036,3.036,0,0,1-2.58547-2.99909V299.447a3.03268,3.03268,0,0,1,3.0284-3.02866H765.13059A3.0232,3.0232,0,0,1,768.159,299.447Z" transform="translate(-209.50067 -120.46217)" fill="#fff"/><path d="M768.159,389.40632v30.2426a3.03267,3.03267,0,0,1-3.0284,3.02867H561.07075c-.14788,0-.295-.01479-.44293-.02958a3.036,3.036,0,0,1-2.58547-2.99909V371.86949l.01443-.0147.57639-3.339c1.52214-7.66775,10.31229-12.0557,18.11269-11.47949,7.80112.57621,14.80438,4.7573,21.5703,8.67238,6.76665,3.93,14.03538,7.80076,21.85093,7.653,15.91172-.29549,27.64226-16.78333,43.49482-18.30511,24.77617-2.39339,41.22028,31.74959,66.07,30.50852,10.69606-.53184,21.68861-7.7416,31.33577-3.11731A15.91608,15.91608,0,0,1,768.159,389.40632Z" transform="translate(-209.50067 -120.46217)" fill="#f0f0f0"/><circle cx="411.45268" cy="165.81159" r="51.01449" fill="#6c63ff"/><ellipse cx="386.26427" cy="72.18841" rx="72.2029" ry="72.18841" fill="#6c63ff"/><circle cx="337.48166" cy="135.2029" r="51.01449" fill="#6c63ff"/><path d="M628.26593,425.24121a.93081.93081,0,0,0,.92041-.79965c.03954-.27787,3.91321-28.21526.43422-65.34522-3.21287-34.29041-13.53069-83.68067-44.43884-124.24409a.93089.93089,0,1,0-1.48083,1.12843c30.64119,40.21314,40.87583,89.241,44.06605,123.28929,3.45877,36.91391-.38453,64.63343-.42377,64.90918a.93161.93161,0,0,0,.92276,1.06206Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/><path d="M612.815,288.48835a.93085.93085,0,0,0,.548-1.68385,128.29612,128.29612,0,0,0-28.32321-14.41807c-15.62641-5.72092-39.38871-10.90733-63.85158-3.12166a.93076.93076,0,1,0,.56452,1.77385c23.96168-7.62568,47.29324-2.525,62.64694,3.09621a126.18873,126.18873,0,0,1,27.86884,14.17565A.92715.92715,0,0,0,612.815,288.48835Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/><circle cx="510.09036" cy="210.23589" r="33.62319" fill="#e4e4e4"/><ellipse cx="526.69181" cy="148.5297" rx="47.58827" ry="47.57872" fill="#e4e4e4"/><circle cx="558.84398" cy="190.06197" r="33.62319" fill="#e4e4e4"/><path d="M714.77136,422.29024a.61348.61348,0,0,1-.60663-.527,205.41554,205.41554,0,0,1-.28619-43.06844c2.11757-22.60049,8.91795-55.15316,29.28924-81.88815a.61354.61354,0,1,1,.976.74374c-20.19533,26.50412-26.94089,58.81793-29.04354,81.25885a204.02616,204.02616,0,0,0,.2793,42.781.614.614,0,0,1-.60818.7Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/><path d="M724.95491,332.15767a.61352.61352,0,0,1-.36119-1.10981,84.55925,84.55925,0,0,1,18.66757-9.50282c10.29923-3.77061,25.96074-7.18892,42.084-2.05746a.61345.61345,0,1,1-.37207,1.16913c-15.79293-5.026-31.17055-1.66422-41.29,2.04069a83.17,83.17,0,0,0-18.3681,9.343A.61106.61106,0,0,1,724.95491,332.15767Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/><path d="M764.63776,630.6775H662.77521V565.16383H768.66632v61.48486A4.03308,4.03308,0,0,1,764.63776,630.6775Zm-99.86255-2h99.86255a2.03094,2.03094,0,0,0,2.02856-2.02881V567.16383H664.77521Z" transform="translate(-209.50067 -120.46217)" fill="#e4e4e4"/><path d="M764.63776,630.6775H684.93634V582.89284h83.73v43.75585A4.03308,4.03308,0,0,1,764.63776,630.6775Zm-77.70142-2h77.70142a2.03094,2.03094,0,0,0,2.02856-2.02881V584.89284h-79.73Z" transform="translate(-209.50067 -120.46217)" fill="#e4e4e4"/><path d="M764.63776,630.6775H710.05231V602.09889h58.614v24.5498A4.03308,4.03308,0,0,1,764.63776,630.6775Zm-52.58545-2h52.58545a2.03094,2.03094,0,0,0,2.02856-2.02881v-22.5498h-54.614Z" transform="translate(-209.50067 -120.46217)" fill="#e4e4e4"/><circle cx="421.7715" cy="425.01792" r="23.63854" fill="#e4e4e4"/><path d="M345.3266,778.71168H332.51727a6.14815,6.14815,0,0,1-6.14123-6.14111V665.80983a6.14816,6.14816,0,0,1,6.14123-6.14112H345.3266a6.14817,6.14817,0,0,1,6.14124,6.14112V772.57057A6.14816,6.14816,0,0,1,345.3266,778.71168Z" transform="translate(-209.50067 -120.46217)" fill="#6c63ff"/><path d="M313.91644,778.71168H301.10687a6.14815,6.14815,0,0,1-6.14123-6.14111V665.80983a6.14816,6.14816,0,0,1,6.14123-6.14112h12.80957a6.14807,6.14807,0,0,1,6.14112,6.14112V772.57057A6.14806,6.14806,0,0,1,313.91644,778.71168Z" transform="translate(-209.50067 -120.46217)" fill="#6c63ff"/><circle cx="117.3836" cy="353.89537" r="51" fill="#6c63ff"/><path d="M346.50816,491.28461c3.22545-.73067,7.23961-1.64053,9.90052-4.52629a8.13271,8.13271,0,0,0,1.96264-6.57775,5.47084,5.47084,0,0,0-2.69577-4.04749c-1.89522-1.05162-4.33047-.90506-6.738.35089l-1.17436-19.87474-1.9965.11762,1.38068,23.36529,1.47616-1.06553c1.71147-1.23494,4.20809-2.18449,6.08139-1.145a3.51513,3.51513,0,0,1,1.692,2.61725,6.14689,6.14689,0,0,1-1.45868,4.90345c-2.07078,2.24559-5.24312,3.10912-8.87206,3.93194Z" transform="translate(-209.50067 -120.46217)" fill="#2f2e41"/><rect x="357.79803" y="455.31665" width="10.77161" height="2" transform="translate(-291.0415 -41.435) rotate(-11.17345)" fill="#2f2e41"/><rect x="324.4425" y="461.90517" width="10.77161" height="2" transform="translate(-292.95048 -47.77374) rotate(-11.17345)" fill="#2f2e41"/><path d="M339.42841,684.96217H279.96784a6.50744,6.50744,0,0,1-6.5-6.5V589.23366a51.32975,51.32975,0,0,1,51.2716-51.27149h46.2284a6.50745,6.50745,0,0,1,6.5,6.5V646.92262A38.08259,38.08259,0,0,1,339.42841,684.96217Z" transform="translate(-209.50067 -120.46217)" fill="#2f2e41"/><path d="M333.53864,669.05836l-.0011-.02148a5.76213,5.76213,0,0,1-5.54639-5.45313l-4.85974-93.37548a11.72391,11.72391,0,0,1,23.28162-2.4795,11.91659,11.91659,0,0,1,.13281,1.26075l4.85962,93.37548a5.7561,5.7561,0,0,1-5.44885,6.04737Z" transform="translate(-209.50067 -120.46217)" fill="#6c63ff"/><path d="M317.32319,451.90484c1.64637-4.93556,7.36508-6.83949,12.12225-6.98738,6.68727-.20789,13.21617,2.16694,19.92434,1.10555,12.16881-1.92538,19.76528-13.6531,22.133-24.88024,1.57921-7.48829,1.43928-15.16474,1.261-22.774a1.52372,1.52372,0,0,0-2.49-1.23486,24.362,24.362,0,0,0-9.84571,13.98866l2.91363.60266,1.53241-13.29036a1.5202,1.5202,0,0,0-1.00453-1.52828c-4.56449-1.58984-8.36971,1.998-10.85331,5.39229-1.28619,1.75781-2.52026,3.673-4.43146,4.8175a10.96348,10.96348,0,0,1-6.52138,1.263c-4.65-.33615-9.05866-2.09325-13.614-2.96314a49.60024,49.60024,0,0,0-12.69316-.7057,53.369,53.369,0,0,0-23.75488,7.49473c-7.20814,4.34318-13.80716,10.55037-17.63277,18.12886-2.18422,4.3269-3.37009,9.3073-2.17023,14.10342a14.27921,14.27921,0,0,0,8.11359,9.96069c1.78577.74761,2.75721-2.09216.98349-2.83472a11.27266,11.27266,0,0,1-6.27308-8.22325c-.85771-3.99124.19244-8.12082,2.02108-11.69538,3.56116-6.96121,9.65672-12.75011,16.3009-16.75615a51.26781,51.26781,0,0,1,22.2467-7.17973,47.04049,47.04049,0,0,1,11.53051.50208c4.27228.712,8.35919,2.241,12.641,2.91612,4.699.74088,9.57521.08923,12.93812-3.56735,2.47348-2.68946,5.52975-9.4401,10.18538-7.81851l-1.00453-1.52828-1.53242,13.29036c-.19173,1.66289,2.484,2.26417,2.91364.60265a21.88513,21.88513,0,0,1,8.99842-12.72424l-2.49-1.23486c.29565,12.617.56038,26.56172-7.84936,36.90045a21.40809,21.40809,0,0,1-14.455,8.1971c-6.5.58247-12.8811-1.77057-19.38958-1.22715-5.628.4699-11.683,3.19082-13.58881,8.904a1.50112,1.50112,0,0,0,2.83472.98348Z" transform="translate(-209.50067 -120.46217)" fill="#2f2e41"/>
+        <path d="M857.98537,779.53783h-647.294a1.19069,1.19069,0,0,1,0-2.38137h647.294a1.19069,1.19069,0,0,1,0,2.38137Z" transform="translate(-209.50067 -120.46217)" fill="#3f3d56"/></svg>
+    <h1 style="font-family: Arial, sans-serif; font-size: 24px;">Create first tree entry</h1>
+    <span style="font-family: Arial, sans-serif; font-size: 14px;">Fortunately, it's easy to create a new one.</span>
+  </div>
+{{end}}
+</div>
+<div style="margin-top: 20px; display: flex; justify-content:right;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left" style="margin-top:20px;"><path d="m15 18-6-6 6-6"/>
+</svg>
+  <div id="pagination" class="paginationContainer"></div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right" style="margin-top:20px;"><path d="m9 18 6-6-6-6"/></svg>
+
+    </div>
+  </div>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <script>
+    feather.replace();
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function (e) {
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+      //sidebar toggle
+    function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('active');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+
+
+  </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.formatted-date').forEach(el => {
+      const rawTs = el.getAttribute('data-ts');
+      const date = new Date(rawTs);
+
+      if (!isNaN(date)) {
+        const weekday = date.toLocaleString('en-US', { weekday: 'long' });
+        const month = date.toLocaleString('en-US', { month: 'long' });
+        const day = date.getDate();
+        const time = date.toLocaleString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        });
+
+        el.textContent = `${weekday}, ${month} ${day} | ${time}`;
+      } else {
+        el.textContent = 'Invalid date';
+      }
+    });
+  });
+
+  //search 
+  const searchInput = document.querySelector('.search-bar input');
+
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.event-card');
+    let found = false;
+
+    cards.forEach(card => {
+      const title = card.querySelector('.event-title')?.textContent.toLowerCase() || '';
+      const description = card.querySelector('.event-description')?.textContent.toLowerCase() || '';
+
+      const match = title.includes(query) || description.includes(query);
+      card.style.display = match ? 'flex' : 'none';
+
+      if (match) found = true;
+    });
+
+    const emptyState = document.querySelector('.empty');
+    if (emptyState) {
+      emptyState.style.display = found ? 'none' : 'block';
+    }
+  });
+
+  //camera 
+const startScanBtn = document.getElementById('startScanBtn');
+  const scannerContainer = document.getElementById('scannerContainer');
+  const closeScan = document.getElementById('closeScan');
+  let html5QrCode;
+
+  startScanBtn.addEventListener('click', () => {
+    scannerContainer.style.display = 'flex';
+
+    html5QrCode = new Html5Qrcode("qr-reader");
+    html5QrCode.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 250 }
+      },
+      (decodedText) => {
+  html5QrCode.stop().then(() => {
+    onScanSuccess(decodedText.trim());
+  });
+},
+
+      (errorMsg) => {
+        // Optional: console.log("No QR code match", errorMsg);
+      }
+    );
+  });
+
+  closeScan.addEventListener('click', () => {
+    if (html5QrCode) {
+      html5QrCode.stop().then(() => {
+        html5QrCode.clear();
+        scannerContainer.style.display = 'none';
+      });
+    }
+  });
+
+  function onScanSuccess(decodedText) {
+  console.log("Scanned text:", decodedText);
+
+  // Extract ID from full URL (e.g., "https://.../gulmohar-tree-1972")
+  const parts = decodedText.split('/');
+  const treeId = parts[parts.length - 1];  // Gets "gulmohar-tree-1972"
+
+  if (treeId) {
+    window.location.href = `/data_entry?id=${treeId}`;
+  } else {
+    alert('Invalid QR code');
+  }
+}
+
+  //total enteries
+  document.addEventListener("DOMContentLoaded", function () {
+    const total = document.querySelectorAll('.event-card').length;
+    document.getElementById('total-count').innerText = `Total ${total} Published`;
+  });
+
+//pagination
+document.addEventListener("DOMContentLoaded", function () {
+  const cards = document.querySelectorAll(".event-card");
+  const paginationContainer = document.getElementById("pagination");
+
+  if (!paginationContainer || cards.length === 0) return;
+
+  const cardsPerPage = 6;
+  let currentPage = 1;
+  const totalPages = Math.ceil(cards.length / cardsPerPage);
+
+  function showPage(page) {
+    const start = (page - 1) * cardsPerPage;
+    const end = start + cardsPerPage;
+    cards.forEach((card, index) => {
+      card.style.display = (index >= start && index < end) ? "flex" : "none";
+    });
+    renderPaginationButtons();
+  }
+
+  function renderPaginationButtons() {
+    paginationContainer.innerHTML = "";
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement("button");
+      btn.textContent = i;
+      btn.className = "pagination-btn";
+      if (i === currentPage) btn.classList.add("active");
+      btn.onclick = () => {
+        currentPage = i;
+        showPage(currentPage);
+      };
+      paginationContainer.appendChild(btn);
+    }
+  }
+
+  showPage(currentPage);
+});
+
+//filter 
+// Toggle dropdown visibility
+  document.getElementById("filterToggle").addEventListener("click", function () {
+    const dropdown = document.getElementById("sortDropdown");
+    dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+  });
+
+  // Sort function
+  function sortCards(order) {
+    const container = document.getElementById("cards-container");
+    const cards = Array.from(container.getElementsByClassName("event-card"));
+
+    cards.sort((a, b) => {
+      const tsA = new Date(a.dataset.ts).getTime();
+      const tsB = new Date(b.dataset.ts).getTime();
+      return order === "latest" ? tsB - tsA : tsA - tsB;
+    });
+
+    // Re-append cards in sorted order
+    cards.forEach(card => container.appendChild(card));
+
+    // Hide dropdown after selection
+    document.getElementById("sortDropdown").style.display = "none";
+  }
+
+  // Optional: Click outside to close dropdown
+  document.addEventListener("click", function (e) {
+    const dropdown = document.getElementById("sortDropdown");
+    const toggle = document.getElementById("filterToggle");
+    if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = "none";
+    }
+  });
+
+    //voluenteer name
+  window.addEventListener("DOMContentLoaded", () => {
+    const email = localStorage.getItem("loggedInEmail");
+    const userSpan = document.getElementById("userEmail");
+
+    if (email && userSpan) {
+      userSpan.textContent = email;
+    } else {
+      userSpan.textContent = "Not logged in";
+    }
+
+    // ✅ Set href with email as query param for /qr-display
+    const qrLink = document.getElementById("qrLink");
+    if (email && qrLink) {
+      qrLink.href = `/qr-display?email=${encodeURIComponent(email)}`;
+    }
+
+    // ✅ Set href with email as query param for /draft
+    const draftLink = document.getElementById("draftLink");
+    if (email && draftLink) {
+      draftLink.href = `/drafts?email=${encodeURIComponent(email)}`;
+    }
+
+        if (email) {
+      fetch(`/api/treecount?email=${encodeURIComponent(email)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          const countSpan = document.getElementById("published-count");
+          if (countSpan) {
+            countSpan.textContent = `${data.count} Published`;
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching tree count:", error);
+          const countSpan = document.getElementById("published-count");
+          if (countSpan) {
+            countSpan.textContent = "Error loading count";
+          }
+        });
+    }
+  });
+  
+  //move to fetch.html
+function viewEvent(card) {
+  const id = card.getAttribute("data-id");
+  if (!id) {
+    alert("Missing ID");
+    return;
+  }
+  window.location.href = `/get-event?id=${id}`;
+}
+
+</script>
+</body>
+</html>
