@@ -1888,7 +1888,7 @@ const startScanBtn = document.getElementById('startScanBtn');
   const treeId = parts[parts.length - 1];  
 
   if (treeId) {
-    window.location.href = `/data_entry?id=${treeId}`;
+    window.location.href = `/get_event?id=${treeId}`;
   } else {
     alert('Invalid QR code');
   }

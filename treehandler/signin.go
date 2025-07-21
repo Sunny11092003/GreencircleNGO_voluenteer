@@ -3,11 +3,14 @@ package treehandler
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"path/filepath"
 )
 
 const firebaseLoginURL = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDzlTwxJ161MSskkRAIfOA0GC3y3Wi4tME"
+const firebaseDBURL = "https://login-credentials-b0464-default-rtdb.firebaseio.com/users" // Replace with your actual DB URL
 
 type AuthLoginRequest struct {
 	Email             string `json:"email"`
@@ -27,7 +30,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// POST method
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Failed to parse form", http.StatusBadRequest)
 		return
@@ -61,6 +63,34 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// success
+	var loginResp AuthLoginResponse
+	if err := json.NewDecoder(resp.Body).Decode(&loginResp); err != nil {
+		http.Error(w, "Failed to parse login response", http.StatusInternalServerError)
+		return
+	}
+
+	// 🔐 Check verification status
+	userDataURL := fmt.Sprintf("%s/%s.json", firebaseDBURL, loginResp.UID)
+	userResp, err := http.Get(userDataURL)
+	if err != nil {
+		http.Error(w, "Failed to fetch user data", http.StatusInternalServerError)
+		return
+	}
+	defer userResp.Body.Close()
+
+	body, _ := ioutil.ReadAll(userResp.Body)
+	var userData map[string]interface{}
+	if err := json.Unmarshal(body, &userData); err != nil {
+		http.Error(w, "Failed to parse user data", http.StatusInternalServerError)
+		return
+	}
+
+	verified, ok := userData["verified"].(bool)
+	if !ok || !verified {
+		http.Error(w, "Account not verified", http.StatusForbidden)
+		return
+	}
+
+	// ✅ Success
 	w.Write([]byte("success"))
 }

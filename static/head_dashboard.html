@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Volunteer Head Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f1f8e9;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #8bc34a;
+      color: white;
+    }
+    input[type="text"] {
+      padding: 8px;
+      margin: 10px 0;
+      width: 300px;
+    }
+    button {
+      padding: 8px 14px;
+      margin: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .approve { background: #4caf50; color: white; }
+    .reject { background: #f44336; color: white; }
+    .bulk { background: #2196f3; color: white; }
+    .status-message {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      display: none;
+    }
+    .success { background: #dff0d8; color: #3c763d; }
+    .error { background: #f2dede; color: #a94442; }
+
+      .logo {
+      font-size: 32px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    a {
+  all: unset; /* resets all inherited and applied styles */
+}
+
+  </style>
+</head>
+<body>
+            <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 45px; width: 45px;" />
+<span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #2e7d32; ">
+  <a href="/">Green Circle </a>
+</span>
+
+      <a href="/">
+    <button class="back" style="background-color: #2e7d32; color: white; border: none; padding: 10px 16px; border-radius: 9999px; font-size: 16px; display: flex; align-items: center; gap: 8px; cursor: pointer; margin-left:1180px;">
+      Back
+    </button>
+    </a>
+
+      </div>
+  <h1>Volunteer Head Dashboard</h1>
+
+  <div id="status-message" class="status-message"></div>
+
+  <input type="text" id="search" placeholder="Search by email..." oninput="filterTable()">
+  <br>
+
+  <button class="bulk" onclick="approveSelected()">Approve Selected</button>
+  <button class="bulk" onclick="rejectSelected()">Reject Selected</button>
+  <a href="/head/head_verified">🔍 View Verified Volunteers</a>
+
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" onclick="toggleAll(this)"></th>
+        <th>Email</th>
+        <th>Submitted</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="pending-table"></tbody>
+  </table>
+
+  <script>
+    let fullData = [];
+
+    function showMessage(message, isError = false) {
+      const msgEl = document.getElementById('status-message');
+      msgEl.textContent = message;
+      msgEl.className = `status-message ${isError ? 'error' : 'success'}`;
+      msgEl.style.display = 'block';
+      
+      setTimeout(() => {
+        msgEl.style.display = 'none';
+      }, 5000);
+    }
+
+async function fetchPending() {
+  try {
+    const res = await fetch('/head/pending');
+    if (!res.ok) throw new Error('Failed to fetch pending volunteers');
+
+    let data = await res.json();
+    if (!Array.isArray(data)) data = []; // prevent null.length error
+    
+    fullData = data;
+    renderTable(data);
+  } catch (error) {
+    showMessage(error.message, true);
+    console.error('Error:', error);
+  }
+}
+
+
+    function renderTable(data) {
+      const table = document.getElementById('pending-table');
+      table.innerHTML = '';
+      
+      if (data.length === 0) {
+        table.innerHTML = '<tr><td colspan="4" style="text-align:center">No pending volunteers</td></tr>';
+        return;
+      }
+
+      data.forEach((row) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="checkbox" class="select" value="${row.email}"></td>
+          <td>${row.email}</td>
+          <td>${row.timestamp}</td>
+          <td>
+            <button class="approve" onclick="approve('${row.email}')">Approve</button>
+            <button class="reject" onclick="reject('${row.email}')">Reject</button>
+          </td>
+        `;
+        table.appendChild(tr);
+      });
+    }
+
+function filterTable() {
+  const keyword = document.getElementById('search').value.toLowerCase();
+  const filtered = fullData.filter(row => row.email && row.email.toLowerCase().includes(keyword));
+  
+  if (filtered.length === 0) {
+    const table = document.getElementById('pending-table');
+    table.innerHTML = '<tr><td colspan="4" style="text-align:center">No email found</td></tr>';
+  } else {
+    renderTable(filtered);
+  }
+}
+
+
+    function toggleAll(master) {
+      const checkboxes = document.querySelectorAll('.select');
+      checkboxes.forEach(cb => cb.checked = master.checked);
+    }
+
+    async function approve(email) {
+      try {
+        const response = await fetch('/head/approve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: email,
+            approvedBy: "admin@tree.org"
+          })
+        });
+        
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error || 'Approval failed');
+        }
+        
+        showMessage(`Successfully approved ${email}`);
+        fetchPending();
+      } catch (error) {
+        showMessage(`Failed to approve ${email}: ${error.message}`, true);
+        console.error('Error:', error);
+      }
+    }
+
+    async function reject(email) {
+      try {
+        const response = await fetch('/head/reject', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error || 'Rejection failed');
+        }
+        
+        showMessage(`Successfully rejected ${email}`);
+        fetchPending();
+      } catch (error) {
+        showMessage(`Failed to reject ${email}: ${error.message}`, true);
+        console.error('Error:', error);
+      }
+    }
+
+    async function approveSelected() {
+      const selected = [...document.querySelectorAll('.select:checked')].map(cb => cb.value);
+      if (selected.length === 0) {
+        showMessage('Please select at least one volunteer', true);
+        return;
+      }
+      
+      try {
+        for (const email of selected) {
+          const response = await fetch('/head/approve', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: email,
+              approvedBy: "admin@tree.org"
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error(`Failed to approve ${email}`);
+          }
+        }
+        
+        showMessage(`Successfully approved ${selected.length} volunteer(s)`);
+        fetchPending();
+      } catch (error) {
+        showMessage(`Failed to approve some volunteers: ${error.message}`, true);
+        console.error('Error:', error);
+      }
+    }
+
+    async function rejectSelected() {
+      const selected = [...document.querySelectorAll('.select:checked')].map(cb => cb.value);
+      if (selected.length === 0) {
+        showMessage('Please select at least one volunteer', true);
+        return;
+      }
+
+      try {
+        for (const email of selected) {
+          const response = await fetch('/head/reject', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          
+          if (!response.ok) {
+            throw new Error(`Failed to reject ${email}`);
+          }
+        }
+        
+        showMessage(`Successfully rejected ${selected.length} volunteer(s)`);
+        fetchPending();
+      } catch (error) {
+        showMessage(`Failed to reject some volunteers: ${error.message}`, true);
+        console.error('Error:', error);
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', fetchPending);
+  </script>
+  
+</body>
+</html>

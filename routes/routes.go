@@ -4,6 +4,7 @@ import (
 	"geotagging/treehandler"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/mux"
 )
 
@@ -52,6 +53,52 @@ func SetupRoutes() *mux.Router {
 	r.HandleFunc("/change-password", treehandler.ChangePasswordHandler).Methods("POST")
 	r.HandleFunc("/settings", treehandler.RenderSettingPage).Methods("GET")
 	r.HandleFunc("/delete-image", treehandler.DeleteImageHandler).Methods("POST")
+
+	/* ────── Head/Admin Dashboard ────── */
+	r.HandleFunc("/head_dashboard", treehandler.HeadDashboard).Methods("GET")
+
+	/* ────── Verified Volunteers ────── */
+	r.HandleFunc("/head/head_verified", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "static/head_verified.html")
+	}).Methods("GET")
+
+	r.HandleFunc("/head/verified_list", func(w http.ResponseWriter, r *http.Request) {
+		ginContext, _ := gin.CreateTestContext(w)
+		treehandler.GetVerifiedVolunteers(ginContext)
+	}).Methods("GET")
+
+	r.HandleFunc("/update_volunteer", func(w http.ResponseWriter, r *http.Request) {
+		ginContext, _ := gin.CreateTestContext(w)
+		treehandler.UpdateVolunteerPermission(ginContext)
+	}).Methods("POST")
+
+	r.HandleFunc("/revoke_volunteer", func(w http.ResponseWriter, r *http.Request) {
+		ginContext, _ := gin.CreateTestContext(w)
+		treehandler.RevokeVolunteer(ginContext)
+	}).Methods("GET")
+
+	/* ────── Pending Volunteers ────── */
+	r.HandleFunc("/head/pending", treehandler.HeadPending).Methods("GET")
+	r.HandleFunc("/head/approve", treehandler.HeadApprove).Methods("POST")
+	r.HandleFunc("/head/reject", treehandler.HeadReject).Methods("POST")
+	r.HandleFunc("/validator", treehandler.LoginHandlervalidator).Methods("GET", "POST")
+	r.HandleFunc("/admin", treehandler.LoginHandleradmin).Methods("GET", "POST")
+
+	// Admin Dashboard route
+	r.HandleFunc("/admin/dashboard", treehandler.AdminDashboardHandler)
+
+	r.HandleFunc("/admin/edit/{id}", treehandler.EditTreeHandler)
+	r.HandleFunc("/admin/delete/{id}", treehandler.DeleteTreeHandleradmin)
+
+	// main.go  (add just after your dashboard route)
+	r.HandleFunc("/admin/edit/{id}", treehandler.EditTreeHandler).Methods("GET", "POST")
+
+	// API endpoints
+	r.HandleFunc("/api/volunteers", treehandler.GetAllUsersHandler).Methods("GET")
+	r.HandleFunc("/api/updateRole", treehandler.UpdateUserRoleHandler).Methods("POST")
+
+	// HTML page
+	r.HandleFunc("/volunteers", treehandler.ServeVolunteersPage).Methods("GET")
 
 	// Serve static files
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))

@@ -7,11 +7,12 @@ import (
 	"io"
 	"net/http"
 	"path/filepath"
+	"time"
 )
 
 const firebaseAPIKey = "AIzaSyDzlTwxJ161MSskkRAIfOA0GC3y3Wi4tME"
 const firebaseAuthURL = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + firebaseAPIKey
-const firebaseDBBaseURL = "https://login-credentials-b0464-default-rtdb.firebaseio.com/users" // no .json
+const firebaseDBBaseURL = "https://login-credentials-b0464-default-rtdb.firebaseio.com/users"
 
 type AuthSignupRequest struct {
 	Email             string `json:"email"`
@@ -31,7 +32,6 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// POST method: parse form
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, `{"error":"Failed to parse form"}`, http.StatusBadRequest)
 		return
@@ -51,7 +51,6 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Firebase signup payload
 	authPayload := AuthSignupRequest{
 		Email:             email,
 		Password:          password,
@@ -60,7 +59,6 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 
 	payloadBytes, _ := json.Marshal(authPayload)
 
-	// Send request to Firebase Auth
 	resp, err := http.Post(firebaseAuthURL, "application/json", bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		http.Error(w, `{"error":"Failed to contact Firebase"}`, http.StatusInternalServerError)
@@ -68,7 +66,6 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Handle Firebase error response
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
 		w.Header().Set("Content-Type", "application/json")
@@ -77,17 +74,18 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Decode Firebase response
 	var authResp AuthSignupResponse
 	if err := json.NewDecoder(resp.Body).Decode(&authResp); err != nil {
 		http.Error(w, `{"error":"Failed to parse Firebase response"}`, http.StatusInternalServerError)
 		return
 	}
 
-	// Save user to Firebase Realtime DB
-	userData := map[string]string{
-		"email": authResp.Email,
-		"uid":   authResp.UID,
+	// ✅ Add verified and timestamp fields
+	userData := map[string]interface{}{
+		"email":     authResp.Email,
+		"uid":       authResp.UID,
+		"verified":  false,
+		"timestamp": time.Now().Format("2006-01-02 15:04:05"),
 	}
 	userJSON, _ := json.Marshal(userData)
 
@@ -108,8 +106,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dbResp.Body.Close()
 
-	// ✅ Success response
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status":"success"}`))
+	w.Write([]byte(`{"status":"success", "message":"Signup successful. Await admin verification."}`))
 }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verified Volunteers - Tree Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #e6ffe6;
+        }
+        h1 {
+            text-align: center;
+            color: green;
+        }
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 90%;
+            background: white;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .status {
+            text-align: center;
+            margin: 20px;
+            font-size: 18px;
+        }
+        .status span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Verified Volunteers Dashboard</h1>
+
+   <div class="status">
+    Upload Time Allowed: <span>{{.StartTime}}</span> to <span>{{.EndTime}}</span> –
+    {{if .IsUploadTime}}
+        <strong style="color: green;">Uploading Open</strong>
+    {{else}}
+        <strong style="color: red;">Uploading Closed</strong>
+    {{end}}
+</div>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Tree ID</th>
+                <th>Tree Name</th>
+                <th>Uploaded By</th>
+                <th>Location</th>
+                <th>Image</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Trees}}
+            <tr>
+                <td>{{.TreeID}}</td>
+                <td>{{.TreeName}}</td>
+                <td>{{.Email}}</td>
+                <td>{{.Location}}</td>
+                <td><img src="{{.ImageURL}}" width="100"></td>
+                <td>{{.Timestamp}}</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</body>
+</html>

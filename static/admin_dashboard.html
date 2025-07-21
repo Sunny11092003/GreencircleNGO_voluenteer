@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .tree-emoji-icon {
+  font-size: 24px;
+  text-shadow: 0px 0px 3px #000; /* dark edge effect */
+}
+
+/* Redesigned Stat Boxes */
+.stat-box {
+  position: relative;
+  padding: 20px;
+  border-radius: 12px;
+  color: #fff;
+  text-align: center;
+  flex: 1;
+  min-width: 160px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-4px);
+}
+
+.stat-trees {
+  background: linear-gradient(135deg, #1b5e20, #4caf50);
+  border-top: 5px solid #2e7d32;
+}
+
+.stat-volunteers {
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+  border-top: 5px solid #1976d2;
+}
+
+.stat-sites {
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+  border-top: 5px solid #8e24aa;
+}
+
+.stat-box h2 {
+  font-size: 2.5rem;
+  margin: 0;
+  color: #fff;
+}
+
+.stat-box p {
+  margin: 8px 0 0 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #f1f1f1;
+}
+
+.stat-box::before {
+  content: attr(data-icon);
+  font-size: 2rem;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  opacity: 0.2;
+}
+
+
+  :root {
+    --primary-green: #2e7d32;
+    --light-green: #81c784;
+    --dark-green: #1b5e20;
+    --leaf-green: #4caf50;
+    --tree-brown: #5d4037;
+    --background-light: #f5f5f5;
+  }
+  
+  
+body {
+  font-family: 'Roboto', sans-serif;
+  background-image: url('https://media.cntraveler.com/photos/5eb18e42fc043ed5d9779733/1:1/w_2866,h_2866,c_limit/BlackForest-Germany-GettyImages-147180370.jpg'); /* Replace with your image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* 👈 Keeps the image fixed while scrolling */
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+
+  
+  /* Header Styles */
+  h1 {
+    text-align: center;
+    background-color: #4caf50;
+    color: whitesmoke;
+    margin-bottom: 8px;
+    margin-top: 0%;
+    font-size: 5rem;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  h1::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--light-green);
+  }
+  
+  /* Last Updated */
+  #lastUpdated {
+    text-align: center;
+    font-size: 14px;
+    margin-top: -5px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  /* View Toggle */
+  .view-toggle {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  
+  .view-toggle button {
+    padding: 8px 20px;
+    margin: 0 5px;
+    border: 1px solid var(--light-green);
+    background: white;
+    color: var(--dark-green);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+  }
+  
+  .view-toggle button:hover {
+    background: var(--light-green);
+    color: white;
+  }
+  
+  /* Filters */
+  .filters {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  
+  .filters select, .filters input[type="text"] {
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    margin: 5px;
+    font-size: 14px;
+    min-width: 200px;
+    background: white;
+    transition: all 0.3s;
+  }
+  
+  .filters input[type="text"] {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23757575" width="18" height="18"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    padding-left: 40px;
+  }
+  
+  .filters select:focus, 
+  .filters input[type="text"]:focus {
+    border-color: var(--light-green);
+    box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.3);
+    outline: none;
+  }
+  
+  /* Export Buttons */
+  .export-buttons {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  
+  .export-buttons button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .export-buttons button:first-child {
+    background: #e74c3c;
+    color: white;
+  }
+  
+  .export-buttons button:last-child {
+    background: var(--primary-green);
+    color: white;
+  }
+  
+  .export-buttons button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* Stats */
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .stat-box {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+    transition: transform 0.3s;
+    border-top: 4px solid var(--primary-green);
+  }
+  
+  .stat-box:hover {
+    transform: translateY(-5px);
+  }
+  
+  .stat-box h2 {
+    font-size: 2.5rem;
+    margin: 0 0 5px 0;
+    color: var(--dark-green);
+  }
+  
+  .stat-box p {
+    margin: 0;
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Cards */
+  .card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 3px solid var(--light-green);
+  }
+  
+  .card-content {
+    padding: 15px;
+  }
+  
+  .card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    color: var(--dark-green);
+  }
+  
+  .card p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .card p strong {
+    color: #333;
+  }
+  
+  .actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .card a, .card button {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .card a {
+    background: #e8f5e9;
+    color: var(--dark-green);
+    text-decoration: none;
+  }
+  
+  .card a:hover {
+    background: #c8e6c9;
+  }
+  
+  .card button {
+    background: #ffebee;
+    color: #c62828;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .card button:hover {
+    background: #ffcdd2;
+  }
+  
+  /* List View */
+  .list-view .grid {
+    display: block;
+  }
+  
+  .list-view .card {
+    display: flex;
+    margin-bottom: 15px;
+  }
+  
+  .list-view .card img {
+    width: 150px;
+    height: 120px;
+    border-bottom: none;
+    border-right: 3px solid var(--light-green);
+  }
+  
+  .list-view .card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .list-view .actions {
+    margin-top: 10px;
+  }
+  
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+  }
+  
+  .modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 10px;
+    width: 450px;
+    max-width: 90%;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    border-top: 5px solid var(--primary-green);
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    color: var(--dark-green);
+  }
+  
+  .close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close:hover {
+    color: #666;
+  }
+  
+  .checkbox-group {
+    margin: 20px 0;
+  }
+  
+  .checkbox-item {
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .checkbox-item input {
+    margin-right: 12px;
+    accent-color: var(--primary-green);
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+  }
+  
+  .modal-actions button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .modal-actions .cancel {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+  }
+  
+  .modal-actions .cancel:hover {
+    background: #e0e0e0;
+  }
+  
+  .modal-actions .export {
+    background: var(--primary-green);
+    color: white;
+    border: none;
+  }
+  
+  .modal-actions .export:hover {
+    background: var(--dark-green);
+  }
+  
+  /* No Image Placeholder */
+  .card div[style*="background:#eee"] {
+    background: #e8f5e9 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-green);
+    font-size: 3rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .stats {
+      flex-direction: column;
+    }
+    
+    .filters select, 
+    .filters input[type="text"] {
+      width: 100%;
+      margin: 5px 0;
+    }
+    
+    .list-view .card {
+      flex-direction: column;
+    }
+    
+    .list-view .card img {
+      width: 100%;
+      height: 150px;
+      border-right: none;
+      border-bottom: 3px solid var(--light-green);
+    }
+  }
+  #bg-slideshow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 1s ease-in-out;
+  filter: brightness(0.7); /* darken slightly for readability */
+}
+
+        .logo {
+      font-size: 32px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+.logo a{
+  all:unset;
+}
+
+a{
+  all:unset;
+}
+
+</style>
+
+<!-- Add Roboto font -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Leaflet Geocoder Plugin -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+</head>
+<body>
+            <div class="logo" >
+        <img src="https://greencircleorg.wordpress.com/wp-content/uploads/2023/09/cropped-gc-png-file-2022.png?w=730" alt="Logo" style="height: 45px; width: 45px;" />
+<span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #ffffff; ">
+  <a href="/">Green Circle </a>
+</span>
+        <a href="/">
+    <button class="back" style="background-color: #2e7d32; color: white; border: none; padding: 10px 16px; border-radius: 9999px; font-size: 16px; display: flex; align-items: center; gap: 8px; cursor: pointer; margin-left:1400px; ">
+      Back
+    </button>
+    </a>
+
+      </div>
+  <!-- 🌄 Dynamic Background Slideshow -->
+<div id="bg-slideshow"></div>
+
+  <h1>Admin Dashboard</h1>
+<a href="/volunteers"><p>Volunteers</p></a>
+
+
+  <p id="lastUpdated" style="text-align:center;font-size:14px;margin-top:-10px;color:#555">
+    Last updated: <span id="lastUpdatedTime">Loading...</span>
+  </p>
+  
+
+<!-- View Toggle -->
+<div class="view-toggle" style="text-align: center; margin-bottom: 10px;">
+  <button onclick="setView('grid')">🔲 Grid View</button>
+  <button onclick="setView('list')">📄 List View</button>
+</div>
+
+<!-- TOP BAR: Filters (left) + Map (right) -->
+<!-- Top Bar Layout: Filters (Left) + Stats (Middle) + Full-Height Map (Right) -->
+<div class="top-bar" style="display: flex; align-items: stretch; gap: 20px; margin-bottom: 30px;">
+
+  <!-- Left: Filters + Export -->
+  <div style="flex: 1; max-width: 380px; min-width: 280px;">
+    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); height: 100%;">
+      <div class="filters" style="display: flex; flex-direction: column; gap: 10px;">
+        <input type="text" id="searchInput" placeholder="Search by ID or Name">
+        <input list="volunteerList" id="volunteerFilter" placeholder="All Volunteers" oninput="applyFilters()">
+        <datalist id="volunteerList"></datalist>
+        <input list="siteList" id="siteFilter" placeholder="All Sites" oninput="applyFilters()">
+        <datalist id="siteList"></datalist>
+        <select id="publishedFilter" onchange="applyFilters()">
+          <option value="all" selected>All Status</option>
+          <option value="true">Published</option>
+          <option value="false">Not Published</option>
+          <label>Start Date</label>
+<input type="date" id="startDate" name="startDate" />
+
+<label>End Date</label>
+<input type="date" id="endDate" name="endDate" />
+
+<button onclick="applyDateFilter()">Apply Filter</button>
+        </select>
+        
+      </div>
+      <!-- Export Buttons -->
+      <div class="export-buttons" style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+        <button onclick="exportToPDF()">Export as PDF</button>
+        <button onclick="showExcelExportModal()">Export as Excel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Middle: Vertical Stats -->
+  <div class="stats-column" style="display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center;">
+    <div class="stat-box stat-trees" data-icon="🌳">
+  <h2>{{.TreeCount}}</h2>
+  <p>Total Trees</p>
+</div>
+
+<div class="stat-box stat-volunteers" data-icon="🤝">
+  <h2>{{.VolunteerCount}}</h2>
+  <p>Volunteers</p>
+</div>
+
+<div class="stat-box stat-sites" data-icon="📍">
+  <h2>{{.SiteCount}}</h2>
+  <p>Sites</p>
+</div>
+
+  </div>
+
+  <!-- Right: Full-Height Map -->
+  <div class="map-container" style="width: 28%; min-width: 810px; background: transparent; border-radius: 10px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); display: flex; flex-direction: column; justify-content: flex-start;">
+    <h2 style="text-align: center; margin-top: 0; color: var(--dark-green); font-size: 1.2rem;">Tree Map</h2>
+    <div id="treeMap" style="flex: 1; width: 100%; min-height: 100%; border-radius: 8px; background: #e8f5e9;"></div>
+
+   
+ 
+</script>
+
+  </div>
+
+</div>
+
+
+
+
+  <!-- Excel Export Modal -->
+  <div id="excelExportModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Select Columns to Export</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="checkbox-group" id="exportColumns">
+        <div class="checkbox-item">
+          <input type="checkbox" id="col-id" checked>
+          <label for="col-id">ID</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="col-common" checked>
+          <label for="col-common">Common Name</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="col-botanical" checked>
+          <label for="col-botanical">Botanical Name</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="col-volunteer" checked>
+          <label for="col-volunteer">Volunteer</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="col-site" checked>
+          <label for="col-site">Site</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="col-published" checked>
+          <label for="col-published">Published</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="col-time" checked>
+          <label for="col-time">Time</label>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="cancel" onclick="closeExcelExportModal()">Cancel</button>
+        <button class="export" onclick="exportToExcel()">Export</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- StattreeDatas Card Full Width -->
+
+
+
+  <div class="grid" id="treeGrid">
+    {{range .Trees}}
+    <div class="card" data-id="{{.ID}}" data-common="{{.Common}}" data-botanical="{{.Botanical}}" data-volunteer="{{.Volunteer}}" data-site="{{.Site}}" data-published="{{.Published}}">
+      {{if .ImageURL}}
+      <img src="{{.ImageURL}}" alt="Tree Image">
+      {{else}}
+      <div style="width:100%;height:180px;background:#eee;text-align:center;line-height:180px; ">No Image</div>
+      {{end}}
+      <div class="card-content">
+        <h3>{{.Common}}</h3>
+        <p><strong>Botanical:</strong> {{.Botanical}}</p>
+        <p><strong>Volunteer:</strong> {{.Volunteer}}</p>
+        <p><strong>Site:</strong> {{.Site}}</p>
+        <p><strong>Published:</strong> {{.Published}}</p>
+        <p><strong>Time:</strong> {{.PublishTime}}</p>
+        <div class="actions">
+          <a href="/admin/edit/{{.ID}}">Edit</a>
+          <form method="POST" action="/admin/delete/{{.ID}}" onsubmit="return confirm('Are you sure?');">
+           <button type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {{end}}
+  </div>
+
+<!-- JSON for JS to read -->
+<script id="treeDataJSON" type="application/json">
+  {{ toJSON .Trees }}
+</script>
+
+<!-- MAP + FILTER + EXPORT SCRIPT -->
+<script>
+  function updateLastUpdatedTime() {
+    const now = new Date();
+    const formatted = now.toLocaleString('en-IN', {
+      dateStyle: 'medium', timeStyle: 'short', hour12: true
+    });
+    document.getElementById("lastUpdatedTime").innerText = formatted;
+  }
+  updateLastUpdatedTime();
+
+  function setView(view) {
+    document.body.classList.toggle('list-view', view === 'list');
+  }
+
+  const cards = document.querySelectorAll('.card');
+  const vSelect = document.getElementById("volunteerFilter");
+  const sSelect = document.getElementById("siteFilter");
+  const pSelect = document.getElementById("publishedFilter");
+  const searchInput = document.getElementById("searchInput");
+
+  const volunteerSet = new Set();
+  const siteSet = new Set();
+  cards.forEach(card => {
+    volunteerSet.add(card.dataset.volunteer);
+    siteSet.add(card.dataset.site);
+  });
+
+  const volunteerList = document.getElementById("volunteerList");
+  const siteList = document.getElementById("siteList");
+
+  volunteerSet.forEach(v => {
+    if (v) {
+      const opt = document.createElement("option");
+      opt.value = v;
+      volunteerList.appendChild(opt);
+    }
+  });
+  siteSet.forEach(s => {
+    if (s) {
+      const opt = document.createElement("option");
+      opt.value = s;
+      siteList.appendChild(opt);
+    }
+  });
+
+  function applyFilters() {
+    const v = vSelect.value.toLowerCase();
+    const s = sSelect.value.toLowerCase();
+    const p = pSelect.value.toLowerCase();
+    const search = searchInput.value.toLowerCase();
+
+    cards.forEach(card => {
+      const matchV = (v === "all" || card.dataset.volunteer.toLowerCase().includes(v));
+      const matchS = (s === "all" || card.dataset.site.toLowerCase().includes(s));
+      const matchP = (p === "all" || card.dataset.published.toLowerCase() === p);
+      const matchSearch =
+        card.dataset.common.toLowerCase().includes(search) ||
+        card.dataset.botanical.toLowerCase().includes(search);
+
+      card.style.display = (matchV && matchS && matchP && matchSearch) ? "block" : "none";
+    });
+  }
+
+  vSelect.onchange = applyFilters;
+  sSelect.onchange = applyFilters;
+  pSelect.onchange = applyFilters;
+  searchInput.oninput = applyFilters;
+
+  function exportToPDF() {
+    window.print();
+  }
+
+  const excelModal = document.getElementById("excelExportModal");
+  const closeBtn = document.querySelector(".close");
+
+  function showExcelExportModal() {
+    excelModal.style.display = "block";
+  }
+
+  function closeExcelExportModal() {
+    excelModal.style.display = "none";
+  }
+
+  closeBtn.onclick = closeExcelExportModal;
+  window.onclick = function (event) {
+    if (event.target === excelModal) {
+      closeExcelExportModal();
+    }
+  }
+
+  function exportToExcel() {
+    const columns = [
+      { id: 'col-id', field: 'ID' },
+      { id: 'col-common', field: 'Common' },
+      { id: 'col-botanical', field: 'Botanical' },
+      { id: 'col-volunteer', field: 'Volunteer' },
+      { id: 'col-site', field: 'Site' },
+      { id: 'col-published', field: 'Published' },
+      { id: 'col-time', field: 'Time' }
+    ];
+
+    const selectedFields = columns
+      .filter(col => document.getElementById(col.id).checked)
+      .map(col => col.field);
+
+    if (selectedFields.length === 0) {
+      alert("Please select at least one column to export");
+      return;
+    }
+
+    let table = '<table><tr>' + selectedFields.map(f => `<th>${f}</th>`).join('') + '</tr>';
+
+    cards.forEach(card => {
+      if (card.style.display !== "none") {
+        const time = card.querySelector("p:last-of-type")?.innerText || "";
+        const data = {
+          ID: card.dataset.id,
+          Common: card.dataset.common,
+          Botanical: card.dataset.botanical,
+          Volunteer: card.dataset.volunteer,
+          Site: card.dataset.site,
+          Published: card.dataset.published,
+          Time: time.replace("Time: ", "")
+        };
+        table += '<tr>' + selectedFields.map(f => `<td>${data[f] || ''}</td>`).join('') + '</tr>';
+      }
+    });
+
+    table += '</table>';
+    const blob = new Blob([table], { type: 'application/vnd.ms-excel' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'trees_data.xls';
+    a.click();
+
+    closeExcelExportModal();
+  }
+
+  // ---------- Leaflet Map Logic ----------
+  const treeData = JSON.parse(document.getElementById("treeDataJSON").textContent);
+  const map = L.map('treeMap').setView([12.9716, 77.5946], 10);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+
+// 🌍 Add Search Control
+L.Control.geocoder({
+  defaultMarkGeocode: false
+})
+.on('markgeocode', function(e) {
+  const bbox = e.geocode.bbox;
+  const poly = L.polygon([
+    bbox.getSouthEast(),
+    bbox.getNorthEast(),
+    bbox.getNorthWest(),
+    bbox.getSouthWest()
+  ]);
+  map.fitBounds(poly.getBounds());
+})
+.addTo(map);
+
+  treeData.forEach(tree => {
+    if (tree.Lat && tree.Lng) {
+      const treeIcon = L.divIcon({
+  className: 'tree-emoji-icon',
+  html: '🌲', // 🌳 or any dark tree emoji
+  iconSize: [28, 28],
+  iconAnchor: [14, 14]
+});
+
+L.marker([tree.Lat, tree.Lng], { icon: treeIcon })
+  .addTo(map)
+  .bindPopup(`<strong>${tree.Common}</strong><br>${tree.Site}<br>By: ${tree.Volunteer}`);
+
+    }
+  });
+
+function applyDateFilter() {
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("endDate").value;
+  if (start && end) {
+    const params = new URLSearchParams(window.location.search);
+    params.set("startDate", start);
+    params.set("endDate", end);
+    window.location.search = params.toString();
+  }
+}
+
+
+</script>
+
+</body>
+</html>
+

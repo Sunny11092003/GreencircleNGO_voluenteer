@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Tree</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .readonly-value {
+      padding: 8px;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Edit Tree</h1>
+  <form method="POST">
+    <label>ID</label>
+    <input type="text" name="id" value="{{.ID}}" readonly>
+
+    <label>Name</label>
+    <input type="text" name="name" value="{{.Name}}" required>
+
+    <label>Botanical</label>
+    <input type="text" name="botanical" value="{{.Botanical}}" required>
+
+    <label>Category (Optional)</label>
+    <input type="text" name="category" value="{{.Category}}">
+
+    <label>Site</label>
+    <input type="text" name="site" value="{{.Site}}" required>
+
+    <label>Volunteer (Read-Only)</label>
+    <div class="readonly-value">{{.Volunteer}}</div>
+
+    <label>Published</label>
+    <div class="readonly-value">{{.Published}}</div>
+
+    <label>QR</label>
+    <div class="readonly-value">{{.QR}}</div>
+
+    <label>Description</label>
+    <textarea name="description" rows="4">{{.Description}}</textarea>
+
+    <label>Medicinal Benefits</label>
+    <textarea name="medicinal" rows="4">{{.Medicinal}}</textarea>
+
+    <button type="submit">Save Changes</button>
+  </form>
+</body>
+</html>

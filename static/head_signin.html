@@ -172,6 +172,9 @@ body::after {
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+a {
+  all: unset; /* resets all inherited and applied styles */
+}
 
     .options {
       display: flex;
@@ -194,10 +197,6 @@ body::after {
   justify-content: center;
   align-items: center;
   height: calc(100vh - 64px); /* adjust based on navbar height */
-}
-
-a {
-  all: unset; /* resets all inherited and applied styles */
 }
 
     @media (max-width: 768px) {
@@ -230,9 +229,8 @@ a {
   </div>
   <div class="login-wrapper">
 <div class="login-container">
-  <h1>Sign up</h1>
+  <h1>Validator Sign in</h1>
 
-<form onsubmit="signupUser(event)">
     <label for="email">Email address / Username *</label>
     <input type="text" id="email" name="email" placeholder="Enter your email" required />
 
@@ -241,69 +239,48 @@ a {
       <input type="password" id="password" name="password" placeholder="Enter your password" required />
     </div>
 
-    <label for="confirm_password">Confirm Password *</label>
-    <div class="password-wrapper">
-      <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required />
-    </div>
+  <button class="sign-in-btn" onclick="loginUser()">Sign in</button>
 
-    <button type="submit" class="sign-in-btn">Sign up</button>
-  </form>
+  <div class="options">
+    <a href="#">Forgot password?</a>
+  </div>
 </div>
 
   </div>
 <script>
-  async function signupUser(event) {
-    event.preventDefault();
-
+  async function loginUser() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-    const confirm = document.getElementById("confirm_password").value.trim();
 
-    if (password !== confirm) {
-      alert("❌ Passwords do not match");
+    if (!email || !password) {
+      alert("Please enter both email and password.");
       return;
     }
 
-    const formData = new URLSearchParams();
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("confirm_password", confirm);
-
     try {
-      const res = await fetch("/signup", {
+      const response = await fetch("/validator", {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: formData.toString()
+  "Content-Type": "application/json",
+},
+body: JSON.stringify({ email, password }),
+
       });
 
-      const data = await res.json();
+      const text = await response.text();
 
-if (res.ok && data.status === "success") {
-  alert("✅ " + (data.message || "Signup successfull await validator verification!"));
-  window.location.href = "/signin";
-  return;
-}
-
-
-      const msg = data?.error?.error?.message || "";
-      let userMessage = "❌ Signup failed";
-
-      if (msg.includes("EMAIL_EXISTS")) {
-        userMessage = "❌ This email is already registered.";
-      } else if (msg.includes("WEAK_PASSWORD")) {
-        userMessage = "❌ Password should be at least 6 characters.";
-      } else if (msg.includes("INVALID_EMAIL")) {
-        userMessage = "❌ Invalid email address.";
+      if (response.ok && text.trim() === "success") {
+        localStorage.setItem("loggedInEmail", email);
+        window.location.href = "/head_dashboard";
+ 
+      } else {
+        alert(text || "Login failed. Please try again.");  // ❌ Error message
       }
-
-      alert(userMessage);
     } catch (err) {
-      alert("❌ Unexpected error occurred.");
-      console.error("Signup error:", err);
+      alert("Network error. Try again.");
     }
   }
 </script>
+
 </body>
 </html>

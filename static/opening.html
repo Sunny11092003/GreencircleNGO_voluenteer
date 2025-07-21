@@ -162,6 +162,63 @@ a{
   all:unset;
 }
 
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #0f172a;
+  color: white;
+  padding: 20px;
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 10px 0;
+  border-bottom: 1px solid #334155;
+  font-size: 16px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  display: none;
+  z-index: 999;
+}
+
+.overlay.show {
+  display: block;
+}
+
+.more-link {
+  margin-top:5px;
+  margin-left: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: #cccccc;
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.more-link:hover {
+  text-decoration: underline;
+}
+
 
     @media (max-width: 768px) {
       .hero {
@@ -183,6 +240,10 @@ a{
 <span style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 600; color: #ffffff; ">
   Green Circle Volunteer
 </span>
+<span class="more-link" onclick="toggleSidebar()">
+  Menu
+</span>
+
       </div>
     <div class="buttons">
       <a href="/signin"><button class="signin">Sign in</button></a>
@@ -196,8 +257,24 @@ a{
     <a href="/signin"><button>Try now</button></a>
   </section>
 
-  <script>
-  </script>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <h3 style="margin-bottom: 20px;">Options</h3>
+  <a href="/validator">Validator</a>
+  <a href="http://localhost:8080/admin">Admin</a>
+  <a href="/signin">Signin</a>
+  <a href="/signup">signup</a>
+  <a href="#">Help</a>
+</div>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<script>
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('show');
+  }
+</script>
+
 
 </body>
 </html>
